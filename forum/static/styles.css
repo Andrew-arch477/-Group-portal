@@ -3,5 +3,44 @@
     flex-direction: column;
     margin-left: 50px;
     margin-right: 50px;
+    margin: 0 auto;               
+    width: fit-content;           
+    align-self: flex-start;
+    width: 80%;
 
+}
+
+.vertical_alignment a {
+    text-decoration: none;  
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 18px;
+    color: #2e2e2e;
+    
+
+}
+
+p {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 18px;
+    color: #2e2e2e;
+}
+
+hr {
+    height: 2px;
+    background-color: #0a0a0a; 
+    border: none;
+    color: #0a0a0a;
+
+
+}
+
+
+h1 {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 900;
+    color: #2e2e2e;
+    margin-top: 55px;
+    margin-left: 50px;
+    text-align: center; 
+    margin-bottom: 75px;
 }

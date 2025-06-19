@@ -4,6 +4,8 @@ from django.db import models
 
 class Forum(models.Model):
     title = models.CharField(max_length=200)
+
+
 class Teacher(models.Model):
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)

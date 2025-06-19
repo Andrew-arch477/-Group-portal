@@ -5,12 +5,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
-class Forums(LoginRequiredMixin, View):
+class Forums(View):
     def get_context_data(self, **kwargs):
         context = kwargs
+        context["css_file"] = 'styles.css'
         return context
     
     def get(self, request):
         forums = Forum.objects.all()
         context = self.get_context_data(forums=forums)
         return render(request, 'forums.html', context)
+#{% url 'detailed_task' forum_id=forum.id %}
