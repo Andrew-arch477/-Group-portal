@@ -40,7 +40,8 @@
     <div class="vertical_alignment">
         {% if forums %}
         {% for forum in forums %}
-            <a href="{% url 'detailed_task' forum_id=forum.id %}">{{ forum.title }}</a>
+            <a href="{% url 'detailed_forum' forum_id=forum.id %}">{{ forum.title }}</a>
+            <p>{{ forum.created_date }}</p>
             <hr>
         {% endfor %}
         {% endif %}
