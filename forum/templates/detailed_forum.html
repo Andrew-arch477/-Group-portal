@@ -57,14 +57,31 @@
     <div class="vertical_alignment_messages">
         {% if messages %}
         {% for message in message %}
-        <div class="horizontal">
+        {% if message.user != request.user%}
             <p>{{ message.user }}</p>
-        </div>
+            <div class="message">
+                <div class="message_content">
+                {{message.text}}
+                </div>
+                <span class="date">{{message.created_date}}</span>
+            </div> 
+        {% endif %}
+        {% if message.user == request.user%}
+            <p>{{ message.user }}</p>
+            <div class="message_me">
+                <div class="message_content">
+                {{message.text}}
+                </div>
+                <span class="date">{{message.created_date}}</span>
+            </div> 
+        {% endif %}
+            
             <hr>
             
         {% endfor %}
         {% endif %}
         {% if not messages %}
+            
             <p>No messages yet</p>
         {% endif %}
 
