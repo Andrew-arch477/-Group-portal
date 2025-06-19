@@ -5,8 +5,60 @@
     margin-right: 50px;
     margin: 0 auto;               
     width: fit-content;           
-    align-self: flex-start;
+    
     width: 80%;
+
+}
+
+.vertical_alignment_forum_list {
+    display: flex; 
+    flex-direction: column;
+    margin: 0 auto;               
+    width: fit-content;           
+    
+    width: 35%;
+    margin-right: 65px;
+    margin-left: 50px;
+}
+
+.vertical-line {
+    width: 1px;
+    height: 255px;
+    background-color: #272727; 
+    margin: 0 15px;
+}
+
+.vertical_alignment_forum_list a {
+    text-decoration: none;  
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 18px;
+    color: #2e2e2e;
+    align-self: flex-start;
+}
+
+.vertical_alignment_forum_list p {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 18px;
+    color: #2e2e2e;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.vertical_alignment_messages {
+    display: flex; 
+    flex-direction: column;
+    margin: 0 auto;               
+    width: fit-content;           
+    
+    width: 65%;
+    margin-left: auto;
+}
+
+.horizontal {
+    display: flex; 
+    flex-direction: row;
+    width: 100%;
+    
 
 }
 
@@ -15,6 +67,17 @@
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 18px;
     color: #2e2e2e;
+    align-self: flex-start;
+    
+
+}
+
+.vertical_alignment p {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 18px;
+    color: #2e2e2e;
+    align-self: flex-end;
+    margin-left: auto;
     
 
 }
