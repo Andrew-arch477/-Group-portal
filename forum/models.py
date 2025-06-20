@@ -45,9 +45,12 @@ class Student(models.Model):
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    username = models.CharField(max_length=50,unique=True,blank=False,null=False)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
-
+    favorite_project = models.CharField(blank=True,null=True)
+    github = models.CharField(blank=False,null=False,unique=True)
+    
 
 
     def __str__(self):
