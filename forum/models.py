@@ -49,8 +49,8 @@ class Student(models.Model):
     username = models.CharField(max_length=50,unique=True,blank=False,null=False)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
-    favorite_project = models.CharField(blank=True,null=True)
-    github = models.CharField(blank=False,null=False,unique=True)
+    favorite_project = models.TextField(blank=True,null=True)
+    github = models.TextField(blank=False,null=False,unique=True)
     
 
 
