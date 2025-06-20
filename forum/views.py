@@ -6,14 +6,48 @@ from django.views.generic import FormView, CreateView
 from .models import Forum
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import LoginForm
+from .forms import LoginForm, CalendarForm
+from datetime import datetime
+import calendar
 
 # Create your views here.
+
+class Calendar(FormView):
+    template_name = 'calendar_event.html'
+    form_class = CalendarForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        now = datetime.now()
+
+        if 'calendar_html' not in context:
+            cal = calendar.HTMLCalendar(firstweekday=0)
+            calendar_html = cal.formatmonth(now.year, now.month)
+            context['calendar_html'] = calendar_html
+            context['month_name'] = calendar.month_name[now.month]
+            context['year'] = now.year
+            context['css_file'] = 'styles.css'
+        return context
+
+    def form_valid(self, form):
+        month = int(form.cleaned_data['month'])
+        year = int(form.cleaned_data['year'])
+
+        cal = calendar.HTMLCalendar(firstweekday=0)
+        calendar_html = cal.formatmonth(year, month)
+
+        return self.render_to_response(self.get_context_data(
+            form=form, 
+            calendar_html=calendar_html, 
+            month_name=calendar.month_name[month], 
+            year=year, 
+            css_file='styles.css',
+        ))
 
 class LoginView(FormView):
     template_name = 'login.html'
     form_class = LoginForm
-    success_url = reverse_lazy('forums') #
+    success_url = reverse_lazy('forums') 
 
     def form_valid(self, form): 
         username = form.cleaned_data['username']

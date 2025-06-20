@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Calendar</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+
+    <h1>Event Calendar</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Show Calendar</button>
+    </form>
+
+    <div class="calendar">
+        {{ calendar_html|safe }}
+    </div>
+
+</body>
+</html>
