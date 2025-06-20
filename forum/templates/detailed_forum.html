@@ -82,8 +82,15 @@
         {% endif %}
         {% if not messages %}
             
-            <p>No messages yet</p>
+            <p>Ще нема повідомлень</p>
         {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.text }}
+            <button type="submit">Відправити</button>
+        </form>
+
+
 
     </div>
     
