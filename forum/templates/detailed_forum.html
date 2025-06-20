@@ -56,9 +56,9 @@
     <div class="vertical-line"></div>
     <div class="vertical_alignment_messages">
         {% if messages %}
-        {% for message in message %}
+        {% for message in messages %}
         {% if message.user != request.user%}
-            <p>{{ message.user }}</p>
+            <p class="p_not_me">{{ message.user }}</p>
             <div class="message">
                 <div class="message_content">
                 {{message.text}}
@@ -67,7 +67,7 @@
             </div> 
         {% endif %}
         {% if message.user == request.user%}
-            <p>{{ message.user }}</p>
+            <p class="p_me">{{ message.user }}</p>
             <div class="message_me">
                 <div class="message_content">
                 {{message.text}}
@@ -76,7 +76,7 @@
             </div> 
         {% endif %}
             
-            <hr>
+            
             
         {% endfor %}
         {% endif %}
@@ -84,10 +84,11 @@
             
             <p>Ще нема повідомлень</p>
         {% endif %}
-        <form method="post">
+        <form method="post" class="message_form">
             {% csrf_token %}
             {{ form.text }}
-            <button type="submit">Відправити</button>
+            <button type="submit" class="send"><i class="lar la-paper-plane"></i>
+            </button>
         </form>
 
 
