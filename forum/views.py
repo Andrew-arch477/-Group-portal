@@ -2,15 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views import View
 from django.urls import reverse_lazy
-from django.views.generic import FormView, CreateView
-from .models import Forum, Message
+from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView
+from .models import Forum, Message, Student
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import LoginForm, MessageForm, CalendarForm
 from datetime import datetime
 import calendar
 
-# Create your views here.
 
 class Calendar(FormView):
     template_name = 'calendar_event.html'
@@ -103,3 +102,13 @@ class DetailedForum(FormView):
         )
         return redirect('detailed_forum', forum_id=self.forum_id)
 
+class PortfolioView(ListView):
+    template_name = "portfolio.html"
+    model = Student
+    context_object_name = 'students'
+
+
+class DetailsPortfolioView(DetailView):
+    template_name = "details/details_portfolio.html"
+    model = Student
+    context_object_name = 'student'
