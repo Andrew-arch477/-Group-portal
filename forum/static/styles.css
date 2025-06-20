@@ -287,3 +287,6 @@ h1 {
     font-weight: bold;
     border: 2px solid #0c5460;
 }
+.btn_login + .btn_login {
+    margin-top: 3px;
+}
