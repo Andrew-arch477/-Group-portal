@@ -77,28 +77,28 @@
 }
 
 .btn_group {
-    display: flex; 
-    flex-direction: row;
-    margin: 0 auto;               
-    width: fit-content;  
-}
-
-.edit_delete {
-    display: flex; 
-    flex-direction: row;
-    align-self: flex-end;
-    margin-left: auto;  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1px;
 }
 
 .reply {
-    padding: 10px;
-    color: rgb(19, 19, 19);
+    background: none;
     border: none;
     cursor: pointer;
-    margin-left: auto; 
-    background: none;
-    margin-top: -10px;
-    align-self: flex-start;
+    line-height: 1;
+    margin: 0;
+}
+
+.reply:hover {
+    color: #053c5c;
+}
+
+.edit_delete {
+    display: flex;
+    gap: 0px;
+    align-items: center;
 }
 
 .p_me {
@@ -162,24 +162,31 @@
 }
   
 .delete {
-    padding: 10px;
+    padding: 5px;
     color: rgb(19, 19, 19);
     border: none;
     cursor: pointer;
-    margin-left: auto; 
     background: none;
-    margin-top: -10px;
+    line-height: 1;
+    margin: 0;
     
+}
+.delete:hover {
+    color: #7c0707;
+}
+
+.edit:hover {
+    color: #053c5c;
 }
 
 .edit {
-    padding: 10px;
+    padding: 5px;
     color: rgb(19, 19, 19);
     border: none;
     cursor: pointer;
-    margin-left: auto; 
     background: none;
-    margin-top: -10px;
+    line-height: 1;
+    margin: 0;
     
 }
 
@@ -188,12 +195,12 @@
     position: relative;
 }
 
-.delete_form {
+/*.delete_form {
     position: absolute;
     bottom: -10px;
     right: -10px;  
     margin-left: 15px;
-}
+}*/
 
 .message_form button {
     padding: 10px;
