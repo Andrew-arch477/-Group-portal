@@ -101,6 +101,8 @@ class DetailedForum(FormView):
             message.delete()
             
             return redirect('detailed_forum', forum_id=self.forum_id)
+        elif "edit_id" in request.POST:
+            self.action = "edit"
             
 
         return super().post(request, *args, **kwargs)
@@ -115,13 +117,19 @@ class DetailedForum(FormView):
         reply_to_id = self.request.POST.get("reply_to_id")
         if reply_to_id:
             reply = Message.objects.get(id=reply_to_id)
-        text = self.request.POST.get("text")
-        Message.objects.create(
-            forum=self.forum,
-            user=self.request.user,
-            text=text,
-            reply=reply
-        )
+            Message.objects.create(
+                forum=self.forum,
+                user=self.request.user,
+                text=text,
+                reply=reply
+            )
+        if self.action == "edit":
+            message_id = self.request.POST.get("edit_id")
+            message = Message.objects.get(id=message_id)
+            message.text = text
+
+            message.save()
+
         return redirect('detailed_forum', forum_id=self.forum_id)
 
 class PortfolioView(ListView):
