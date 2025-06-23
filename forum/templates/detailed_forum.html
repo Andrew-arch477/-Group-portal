@@ -56,29 +56,76 @@
     <div class="vertical-line"></div>
     <div class="vertical_alignment_messages">
         {% if messages %}
-        {% for message in messages %}
-        {% if message.user != request.user%}
-            <p class="p_not_me">{{ message.user }}</p>
-            <div class="message">
-                <div class="message_content">
-                {{message.text}}
+            {% for message in messages %}
+                {% if message.user != request.user%}
+                    {% if message.reply %}
+                        <div >
+                            <h6>Replied to {{ message.reply.user }}</uk>
+                        </div>
+                    {% endif %}
+                <div class="horizontal">
+                    <p class="p_not_me">{{ message.user }}</p>
+                    
+                    
                 </div>
-                <span class="date">{{message.created_date}}</span>
-            </div> 
-        {% endif %}
-        {% if message.user == request.user%}
-            <p class="p_me">{{ message.user }}</p>
-            <div class="message_me">
-                <div class="message_content">
-                {{message.text}}
+                    <div class="message">
+                        <div class="message_content">
+                        {{message.text}}
+                        </div>
+                        <span class="date">{{message.created_date}}</span>
+                    </div> 
+                {% endif %}
+                {% if message.user == request.user%}
+                    
+                <p class="p_me">{{ message.user }}</p>
+                
+                    <div class="message_me">
+                        {% if message.reply %}
+                            <div>
+                                <p>Replied to {{ message.reply.user }}</p>
+                            </div>
+                        {% endif %}
+                        <div class="message_content">
+                            <div class="btn_group">
+                                
+                                <button onclick="open_reply_form('{{ message.id }}')" class="reply"><i class="las la-reply"></i></button>
+                                <div class="edit_delete">
+                
+                                    <form method="post" style="display:inline;" class="delete_form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete_id" value="{{ message.id }}">
+                                        <button type="submit" class="delete"><i class="lar la-trash-alt"></i></button>
+                                    </form>
+                                    <button onclick="open_edit_form('{{ message.id }}')" class="edit"><i class="las la-edit"></i></button>
+                                </div>
+                            </div>
+                            <div class="message_box">
+                                {{message.text}}
+
+                                
+                            </div>
+                        
+                        </div>
+                        <span class="date">{{message.created_date}}</span>
+                    </div> 
+                    
+                {% endif %}
+            
+                
+
+                <div id="reply_form_{{ message.id }}" style="display: none;">
+                    It's for replies
+                    <form method="post" class="message_form">
+                        {% csrf_token %}
+                        <input type="hidden" name="reply_to_id" value="{{ message.id }}">
+                        {{ form.text }}
+                        <button type="submit" class="send"><i class="lar la-paper-plane"></i></button>
+                    </form>
                 </div>
-                <span class="date">{{message.created_date}}</span>
-            </div> 
-        {% endif %}
-            
-            
-            
-        {% endfor %}
+                
+                
+                
+            {% endfor %}
         {% endif %}
         {% if not messages %}
             
@@ -96,6 +143,19 @@
     </div>
     
     </div>
+
+    <script>
+        function open_reply_form(messageId) {
+            document.getElementById(
+                `reply_form_${messageId}`
+            ).style.display = "block";
+        }
+        function close_reply_form(messageId) {
+            document.getElementById(
+                `reply_form_${messageId}`
+            ).style.display = "none";
+        }
+    </script>
     
 </body>
 </html>

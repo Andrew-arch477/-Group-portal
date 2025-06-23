@@ -76,6 +76,31 @@
     margin-left: auto; 
 }
 
+.btn_group {
+    display: flex; 
+    flex-direction: row;
+    margin: 0 auto;               
+    width: fit-content;  
+}
+
+.edit_delete {
+    display: flex; 
+    flex-direction: row;
+    align-self: flex-end;
+    margin-left: auto;  
+}
+
+.reply {
+    padding: 10px;
+    color: rgb(19, 19, 19);
+    border: none;
+    cursor: pointer;
+    margin-left: auto; 
+    background: none;
+    margin-top: -10px;
+    align-self: flex-start;
+}
+
 .p_me {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 19px;
@@ -123,9 +148,55 @@
 .send i {
     font-size: 27px; 
 }
+
+.delete i {
+    font-size: 21px; 
+}
+
+.reply i {
+    font-size: 21px; 
+}
+
+.edit i {
+    font-size: 21px; 
+}
   
+.delete {
+    padding: 10px;
+    color: rgb(19, 19, 19);
+    border: none;
+    cursor: pointer;
+    margin-left: auto; 
+    background: none;
+    margin-top: -10px;
+    
+}
+
+.edit {
+    padding: 10px;
+    color: rgb(19, 19, 19);
+    border: none;
+    cursor: pointer;
+    margin-left: auto; 
+    background: none;
+    margin-top: -10px;
+    
+}
+
+
+.message_box {
+    position: relative;
+}
+
+.delete_form {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;  
+    margin-left: 15px;
+}
+
 .message_form button {
-    padding: 10px 20px;
+    padding: 10px;
     background-color: #0d4d72;
     color: white;
     font-size: 16px;

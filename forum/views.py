@@ -88,10 +88,22 @@ class DetailedForum(FormView):
     
     def get(self, request, *args, **kwargs):
         forums = Forum.objects.all().order_by('-created_date')
-        messages = self.forum.message_set.all().order_by('created_date')
+        messages = self.forum.message_set.all().select_related('reply').order_by('created_date')
         context = self.get_context_data(forum=self.forum, messages=messages, forums=forums)
         context["css_file"] = 'styles.css'
         return render(request, 'detailed_forum.html', context)
+
+    def post(self, request, *args, **kwargs):
+        if "delete_id" in request.POST:
+            message_id = request.POST.get("delete_id")
+            message = Message.objects.get(id=message_id)
+
+            message.delete()
+            
+            return redirect('detailed_forum', forum_id=self.forum_id)
+            
+
+        return super().post(request, *args, **kwargs)
     
     def form_valid(self, form):
         text=form.cleaned_data['text']
@@ -99,6 +111,16 @@ class DetailedForum(FormView):
             forum=self.forum,
             user=self.request.user,
             text=text
+        )
+        reply_to_id = self.request.POST.get("reply_to_id")
+        if reply_to_id:
+            reply = Message.objects.get(id=reply_to_id)
+        text = self.request.POST.get("text")
+        Message.objects.create(
+            forum=self.forum,
+            user=self.request.user,
+            text=text,
+            reply=reply
         )
         return redirect('detailed_forum', forum_id=self.forum_id)
 
