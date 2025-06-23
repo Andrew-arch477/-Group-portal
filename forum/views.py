@@ -82,6 +82,7 @@ class DetailedForum(FormView):
     def dispatch(self, request, *args, **kwargs):
         self.forum_id = kwargs.get('forum_id')
         self.forum = None
+        self.action = None
         if self.forum_id:
             self.forum = Forum.objects.get(id=self.forum_id)
         return super().dispatch(request, *args, **kwargs)
@@ -108,14 +109,16 @@ class DetailedForum(FormView):
         return super().post(request, *args, **kwargs)
     
     def form_valid(self, form):
-        text=form.cleaned_data['text']
-        Message.objects.create(
-            forum=self.forum,
-            user=self.request.user,
-            text=text
-        )
+        text = form.cleaned_data['text']
         reply_to_id = self.request.POST.get("reply_to_id")
-        if reply_to_id:
+        edit_id = self.request.POST.get("edit_id")
+
+        if self.action == "edit" and edit_id:
+            message = Message.objects.get(id=edit_id, user=self.request.user)
+            message.text = text
+            message.save()
+
+        elif reply_to_id:
             reply = Message.objects.get(id=reply_to_id)
             Message.objects.create(
                 forum=self.forum,
@@ -123,12 +126,12 @@ class DetailedForum(FormView):
                 text=text,
                 reply=reply
             )
-        if self.action == "edit":
-            message_id = self.request.POST.get("edit_id")
-            message = Message.objects.get(id=message_id)
-            message.text = text
-
-            message.save()
+        else:
+            Message.objects.create(
+                forum=self.forum,
+                user=self.request.user,
+                text=text
+            )
 
         return redirect('detailed_forum', forum_id=self.forum_id)
 

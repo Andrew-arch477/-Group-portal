@@ -55,12 +55,18 @@
         </div>
     <div class="vertical-line"></div>
     <div class="vertical_alignment_messages">
+        <form method="post" class="message_form">
+            {% csrf_token %}
+            {{ form.text }}
+            <button type="submit" class="send"><i class="lar la-paper-plane"></i>
+            </button>
+        </form>
         {% if messages %}
             {% for message in messages %}
                 {% if message.user != request.user%}
                     {% if message.reply %}
                         <div >
-                            <h6>Replied to {{ message.reply.user }}</uk>
+                            <p>Replied to {{ message.reply.user }}</p>
                         </div>
                     {% endif %}
                 <div class="horizontal">
@@ -118,7 +124,7 @@
                     <form method="post" class="message_form">
                         {% csrf_token %}
                         <input type="hidden" name="reply_to_id" value="{{ message.id }}">
-                        {{ form.text }}
+                        {{form.text}}
                         <button type="submit" class="send"><i class="lar la-paper-plane"></i></button>
                     </form>
                 </div>
@@ -139,12 +145,7 @@
             
             <p>No messages yet</p>
         {% endif %}
-        <form method="post" class="message_form">
-            {% csrf_token %}
-            {{ form.text }}
-            <button type="submit" class="send"><i class="lar la-paper-plane"></i>
-            </button>
-        </form>
+        
 
 
 
