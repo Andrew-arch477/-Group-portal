@@ -13,6 +13,7 @@ class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
+    reply = models.ForeignKey('self', on_delete=models.SET_NULL, null=True) #reply to
 
 
 class Teacher(models.Model):
@@ -45,11 +46,11 @@ class Student(models.Model):
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    username = models.CharField(max_length=50,unique=True,blank=False,null=False)
+    username = models.CharField(max_length=50,unique=True,blank=False,null=False, default=None)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
     favorite_project = models.TextField(blank=True,null=True)
-    github = models.TextField(blank=False,null=False,unique=True)
+    github = models.TextField(blank=False,null=False,unique=True, default=None)
     
 
 
@@ -68,4 +69,4 @@ class Event(models.Model):
     description = models.CharField(max_length=100)
     time = models.TimeField()
     date = models.IntegerField()
-    mounth = models.CharField(choices=MONTH_CHOICES)
+    mounth = models.CharField(max_length=100, choices=MONTH_CHOICES)

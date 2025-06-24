@@ -82,24 +82,57 @@ class DetailedForum(FormView):
     def dispatch(self, request, *args, **kwargs):
         self.forum_id = kwargs.get('forum_id')
         self.forum = None
+        self.action = None
         if self.forum_id:
             self.forum = Forum.objects.get(id=self.forum_id)
         return super().dispatch(request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
         forums = Forum.objects.all().order_by('-created_date')
-        messages = self.forum.message_set.all().order_by('created_date')
+        messages = self.forum.message_set.all().select_related('reply').order_by('created_date')
         context = self.get_context_data(forum=self.forum, messages=messages, forums=forums)
         context["css_file"] = 'styles.css'
         return render(request, 'detailed_forum.html', context)
+
+    def post(self, request, *args, **kwargs):
+        if "delete_id" in request.POST:
+            message_id = request.POST.get("delete_id")
+            message = Message.objects.get(id=message_id)
+
+            message.delete()
+            
+            return redirect('detailed_forum', forum_id=self.forum_id)
+        elif "edit_id" in request.POST:
+            self.action = "edit"
+            
+
+        return super().post(request, *args, **kwargs)
     
     def form_valid(self, form):
-        text=form.cleaned_data['text']
-        Message.objects.create(
-            forum=self.forum,
-            user=self.request.user,
-            text=text
-        )
+        text = form.cleaned_data['text']
+        reply_to_id = self.request.POST.get("reply_to_id")
+        edit_id = self.request.POST.get("edit_id")
+
+        if self.action == "edit" and edit_id:
+            message = Message.objects.get(id=edit_id, user=self.request.user)
+            message.text = text
+            message.save()
+
+        elif reply_to_id:
+            reply = Message.objects.get(id=reply_to_id)
+            Message.objects.create(
+                forum=self.forum,
+                user=self.request.user,
+                text=text,
+                reply=reply
+            )
+        else:
+            Message.objects.create(
+                forum=self.forum,
+                user=self.request.user,
+                text=text
+            )
+
         return redirect('detailed_forum', forum_id=self.forum_id)
 
 class PortfolioView(ListView):

@@ -65,15 +65,67 @@
     color: #333;
 }
 
+.replied_me {
+    background-color: #578dcc;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 12px 0 0 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 40%; 
+}
+
 .message_me {
-    max-width: 60%;
     background-color: #cee2e7;
     padding: 12px 16px;
-    margin: 0px 5px 5px 5px;
-    border-radius: 12px 0px 12px 12px; 
+    margin: 0;
+    border-radius: 12px 0px 12px 12px;
     font-family: 'Hanken Grotesk', sans-serif;
     color: #333;
-    margin-left: auto; 
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 40%;
+}
+
+.message_block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+
+
+.replied {
+    background-color: #277386;
+    border-radius: 0px 12px 12px 12px; 
+    font-family: 'Hanken Grotesk', sans-serif;
+    color: #e0e0e0;
+}
+
+.btn_group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1px;
+}
+
+.reply {
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    margin: 0;
+}
+
+.reply:hover {
+    color: #053c5c;
+}
+
+.edit_delete {
+    display: flex;
+    gap: 0px;
+    align-items: center;
 }
 
 .p_me {
@@ -123,9 +175,62 @@
 .send i {
     font-size: 27px; 
 }
+
+.delete i {
+    font-size: 21px; 
+}
+
+.reply i {
+    font-size: 21px; 
+}
+
+.edit i {
+    font-size: 21px; 
+}
   
+.delete {
+    padding: 5px;
+    color: rgb(19, 19, 19);
+    border: none;
+    cursor: pointer;
+    background: none;
+    line-height: 1;
+    margin: 0;
+    
+}
+.delete:hover {
+    color: #7c0707;
+}
+
+.edit:hover {
+    color: #053c5c;
+}
+
+.edit {
+    padding: 5px;
+    color: rgb(19, 19, 19);
+    border: none;
+    cursor: pointer;
+    background: none;
+    line-height: 1;
+    margin: 0;
+    
+}
+
+
+.message_box {
+    position: relative;
+}
+
+/*.delete_form {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;  
+    margin-left: 15px;
+}*/
+
 .message_form button {
-    padding: 10px 20px;
+    padding: 10px;
     background-color: #0d4d72;
     color: white;
     font-size: 16px;
@@ -135,6 +240,21 @@
 }
   
 .message_form button:hover {
+    background-color: #053c5c;
+}
+.save {
+    padding: 10px;
+    background-color: #0d4d72;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100px;
+    height: 50px;
+}
+
+.save:hover {
     background-color: #053c5c;
 }
 
