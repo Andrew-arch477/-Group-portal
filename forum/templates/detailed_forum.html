@@ -64,33 +64,45 @@
         {% if messages %}
             {% for message in messages %}
                 {% if message.user != request.user%}
-                    {% if message.reply %}
-                        <div >
-                            <p>Replied to {{ message.reply.user }}</p>
-                        </div>
-                    {% endif %}
+                
                 <div class="horizontal">
                     <p class="p_not_me">{{ message.user }}</p>
                     
                     
                 </div>
+                <div class="message_block">
+                    {% if message.reply %}
+                        <div class="replied_me">
+                            <p>Replied to {{ message.reply.user }}</p>
+                        </div>
+                    {% endif %}
                     <div class="message">
                         <div class="message_content">
-                        {{message.text}}
+                            <div class="btn_group">
+                                
+                                <button onclick="open_reply_form('{{ message.id }}')" class="reply"><i class="las la-reply"></i></button>
+                            </div>
+                            <div class="message_box">
+                                {{message.text}}
+                            </div>
                         </div>
                         <span class="date">{{message.created_date}}</span>
                     </div> 
+                </div>
                 {% endif %}
                 {% if message.user == request.user%}
                     
                 <p class="p_me">{{ message.user }}</p>
-                
-                    <div class="message_me">
+
+                <div class="message_block">
                         {% if message.reply %}
-                            <div>
+                            <div class="replied_me">
                                 <p>Replied to {{ message.reply.user }}</p>
                             </div>
                         {% endif %}
+                
+                    <div class="message_me">
+                        
                         <div class="message_content">
                             <div class="btn_group">
                                 
@@ -114,6 +126,7 @@
                         </div>
                         <span class="date">{{message.created_date}}</span>
                     </div> 
+                </div>
                     
                 {% endif %}
             
@@ -132,8 +145,8 @@
                     <form method="post" class="message_form">
                         {% csrf_token %}
                         <input type="hidden" name="edit_id" value="{{ message.id }}">
-                        <textarea name="text" required>{{ message.text }}</textarea>
-                        <button type="submit" class="send">Save</button>
+                        <textarea name="text" class="form-control" rows="2" style="width: 90%;" required>{{ message.text }}</textarea>
+                        <button type="submit" class="save">Save</button>
                     </form>
                 </div>
                 

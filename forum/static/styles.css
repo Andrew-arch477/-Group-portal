@@ -65,15 +65,42 @@
     color: #333;
 }
 
+.replied_me {
+    background-color: #578dcc;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 12px 0 0 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 40%; 
+}
+
 .message_me {
-    max-width: 60%;
     background-color: #cee2e7;
     padding: 12px 16px;
-    margin: 0px 5px 5px 5px;
-    border-radius: 12px 0px 12px 12px; 
+    margin: 0;
+    border-radius: 12px 0px 12px 12px;
     font-family: 'Hanken Grotesk', sans-serif;
     color: #333;
-    margin-left: auto; 
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 40%;
+}
+
+.message_block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+
+
+.replied {
+    background-color: #277386;
+    border-radius: 0px 12px 12px 12px; 
+    font-family: 'Hanken Grotesk', sans-serif;
+    color: #e0e0e0;
 }
 
 .btn_group {
@@ -213,6 +240,21 @@
 }
   
 .message_form button:hover {
+    background-color: #053c5c;
+}
+.save {
+    padding: 10px;
+    background-color: #0d4d72;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100px;
+    height: 50px;
+}
+
+.save:hover {
     background-color: #053c5c;
 }
 
