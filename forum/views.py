@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views import View
 from django.urls import reverse_lazy
-from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView
-from .models import Forum, Message, Student
+from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView, TemplateView
+from .models import Forum, Message, Student, Subject, Grade
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import LoginForm, MessageForm, CalendarForm
+from .forms import LoginForm, MessageForm, CalendarForm, GradeForm
 from datetime import datetime
 import calendar
 
@@ -112,3 +112,40 @@ class DetailsPortfolioView(DetailView):
     template_name = "details/details_portfolio.html"
     model = Student
     context_object_name = 'student'
+
+
+class GradebookHomeView(TemplateView):
+    template_name = 'gradebook.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['grades'] = Grade.objects.all().order_by('-date')
+        context['students'] = Student.objects.all()
+        context['subject'] = Subject.objects.get(subject_name='Python')
+        return context
+
+
+class AddGradeView(FormView):
+    form_class = GradeForm
+    success_url = '/gradebookhome'
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subject'] = Subject.objects.get(subject_name='Python')
+        return context
+
+
+class StudentGradesView(TemplateView):
+    template_name = 'student_grades.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        student_id = self.kwargs['student_id']
+        context['student'] = Student.objects.get(pk=student_id)
+        context['grades'] = Grade.objects.filter(student=student_id).order_by('-date')
+        context['subject'] = Subject.objects.get(subject_name='Python')
+        return context
