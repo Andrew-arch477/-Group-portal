@@ -126,6 +126,7 @@ class GradebookHomeView(TemplateView):
 
 
 class AddGradeView(FormView):
+    template_name = 'add_grade.html'
     form_class = GradeForm
     success_url = '/gradebookhome'
 
