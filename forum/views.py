@@ -109,6 +109,8 @@ class DetailedForum(FormView):
         return super().post(request, *args, **kwargs)
     
     def form_valid(self, form):
+        if not self.request.user.is_authenticated:
+            return redirect('login')
         text = form.cleaned_data['text']
         reply_to_id = self.request.POST.get("reply_to_id")
         edit_id = self.request.POST.get("edit_id")

@@ -55,12 +55,20 @@
         </div>
     <div class="vertical-line"></div>
     <div class="vertical_alignment_messages">
-        <form method="post" class="message_form">
-            {% csrf_token %}
-            {{ form.text }}
-            <button type="submit" class="send"><i class="lar la-paper-plane"></i>
-            </button>
-        </form>
+        {% if user.is_authenticated %}
+            <form method="post" class="message_form">
+                {% csrf_token %}
+                {{ form.text }}
+                <button type="submit" class="send"><i class="lar la-paper-plane"></i>
+                </button>
+            </form>
+        {% endif %}
+        {% if not user.is_authenticated %}
+            <form method="post" class="message_form">
+                {% csrf_token %}
+                {{ form.text }}
+            </form>
+        {% endif %}
         {% if messages %}
             {% for message in messages %}
                 {% if message.user != request.user%}
@@ -78,10 +86,12 @@
                     {% endif %}
                     <div class="message">
                         <div class="message_content">
+                            {% if user.is_authenticated %}
                             <div class="btn_group">
                                 
                                 <button onclick="open_reply_form('{{ message.id }}')" class="reply"><i class="las la-reply"></i></button>
                             </div>
+                            {% endif %}
                             <div class="message_box">
                                 {{message.text}}
                             </div>
@@ -104,6 +114,7 @@
                     <div class="message_me">
                         
                         <div class="message_content">
+                            {% if user.is_authenticated %}
                             <div class="btn_group">
                                 
                                 <button onclick="open_reply_form('{{ message.id }}')" class="reply"><i class="las la-reply"></i></button>
@@ -117,6 +128,7 @@
                                     <button onclick="open_edit_form('{{ message.id }}')" class="edit"><i class="las la-edit"></i></button>
                                 </div>
                             </div>
+                            {% endif %}
                             <div class="message_box">
                                 {{message.text}}
 
