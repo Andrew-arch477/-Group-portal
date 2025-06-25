@@ -20,6 +20,12 @@
         <div class="calendar">
             {{ calendar_html|safe }}
         </div>
+
+        <form method="post" class="center_div_calender">
+            {% for event in events %}
+                <li>{{ event.name }} - {{ event.date }} - {{ event.description }} - {{ event.time }} - {{event.mounth}} - {{ event.year }}</li>
+            {% endfor %}
+        </form>
     </div>
 
 </body>
