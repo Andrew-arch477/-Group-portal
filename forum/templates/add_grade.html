@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Grade</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Grade</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div>
+                <label class="form-label">Student</label>
+                {{ form.student }}
+            </div>
+            
+            <div>
+                <label class="form-label">Teacher</label>
+                {{ form.teacher }}
+            </div>
+            
+            <div>
+                <label class="form-label">Subject</label>
+                {{ form.subject }}
+            </div>
+            
+            <div>
+                <label class="form-label">Grade</label>
+                {{ form.grade }}
+            </div>
+            
+            <div>
+                <label class="form-label">Notes</label>
+                {{ form.notes }}
+            </div>
+            
+            <button type="submit">Save</button>
+            <a href="{% url 'journal_home' %}">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

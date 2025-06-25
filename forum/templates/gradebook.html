@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Group Journal</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Python Group Journal</h1>
+        
+        <a href="{% url 'add_grade' %}">Add Grade</a>
+        
+        <h2>Students</h2>
+        <div class="list-group">
+            {% for student in students %}
+                <a href="{% url 'student_grades' student.id %}">
+                    {{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}
+                </a>
+            {% endfor %}
+        </div>
+        
+        <h2>Recent Grades</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Grade</th>
+                    <th>Teacher</th>
+                    <th>Date</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in grades %}
+                <tr>
+                    <td>{{ grade.student.first_name }} {{ grade.student.middle_name }}</td>
+                    <td>{{ grade.grade }}</td>
+                    <td>{{ grade.teacher.first_name }} {{ grade.teacher.middle_name }}</td>
+                    <td>{{ grade.date }}</td>
+                    <td>{{ grade.notes|default:"" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
