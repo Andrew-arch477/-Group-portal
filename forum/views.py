@@ -152,4 +152,10 @@ class PortfolioView(ListView):
 class DetailsPortfolioView(DetailView):
     template_name = "details/details_portfolio.html"
     model = Student
-    context_object_name = 'student'
+    context_object_name = 'students'
+
+    def get_object(self, queryset = None):
+        obj = super().get_object(queryset)
+        if not obj.username.startswith('@'):
+            obj.username = '@'+obj.username
+        return obj
