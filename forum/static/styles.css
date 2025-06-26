@@ -410,3 +410,38 @@ h1 {
 .btn_login + .btn_login {
     margin-top: 3px;
 }
+.card {
+    background-color: #272727; 
+    color: #9dc9ff;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+.card:hover {
+    background-color: #27466b;
+}
+
+.card-title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 700;
+    color: #e0e6ed;
+    margin-bottom: .5rem;
+}
+
+.card-subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 500;
+    color: #ced6e0;
+    margin-bottom: 1rem;
+}
+
+.card-text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 0.9rem;
+    color: #6b8ba4;
+}
+
+a.text-decoration-none {
+    color: inherit; /* Ссылка не ломает цвет карточки */
+    text-decoration: none;
+}
