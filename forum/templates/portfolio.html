@@ -8,14 +8,29 @@
     <title>Portfolio</title>
 </head>
 <body>
-    <h2>
-    <a href="/forums" class="btn btn-primary">Назад</a>
-    </h2>
-    <h1>
-        {% for student in students %}
-        <a href="/details_portfolio/{{ student.id }}">{{ student }}</a><br>
-        {% endfor %}
-    </h1>
+    <div class="container my-4">
+        <div class="row g-4">
+          {% for student in students %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <a href="/details_portfolio/{{ student.id }}" class="text-decoration-none">
+                <div class="card h-100">
+                  <div class="card-body d-flex flex-column">
+      
+                    <h5 class="card-title mb-1">
+                        {{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}
+                    </h5>
+                    <h6 class="card-subtitle mb-3">
+                        {{ student.username }}
+                    </h6>
+
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>

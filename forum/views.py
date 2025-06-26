@@ -146,7 +146,13 @@ class PortfolioView(ListView):
     template_name = "portfolio.html"
     model = Student
     context_object_name = 'students'
-
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for student in context["students"]:
+            if not student.username.startswith('@'):
+                student.username = '@'+student.username
+        return context
 
 class DetailsPortfolioView(DetailView):
     template_name = "details/details_portfolio.html"
