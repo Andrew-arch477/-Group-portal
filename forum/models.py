@@ -4,6 +4,15 @@ import calendar
 
 # Create your models here.
 
+class Profile(models.Model):
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('moderator', 'Moderator'),
+        ('user', 'User'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
+
 class Forum(models.Model):
     title = models.CharField(max_length=200)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -13,6 +22,7 @@ class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
+    reply = models.ForeignKey('self', on_delete=models.SET_NULL, null=True) #reply to
 
 
 class Teacher(models.Model):
@@ -45,9 +55,12 @@ class Student(models.Model):
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    username = models.CharField(max_length=50,unique=True,blank=False,null=False, default=None)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
-
+    favorite_project = models.TextField(blank=True,null=True)
+    github = models.TextField(blank=False,null=False,unique=True, default=None)
+    
 
 
     def __str__(self):
