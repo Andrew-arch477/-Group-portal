@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView
-from .models import Forum, Message, Student
+from .models import Forum, Message, Student, Event
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import LoginForm, MessageForm, CalendarForm
@@ -18,6 +18,8 @@ class Calendar(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         now = datetime.now()
+
+        context['events'] = kwargs.get('events', Event.objects.all())
 
         if 'calendar_html' not in context:
             cal = calendar.HTMLCalendar(firstweekday=0)
@@ -35,12 +37,15 @@ class Calendar(FormView):
         cal = calendar.HTMLCalendar(firstweekday=0)
         calendar_html = cal.formatmonth(year, month)
 
+        filtered_events = Event.objects.filter(month=month, year=year)
+
         return self.render_to_response(self.get_context_data(
             form=form, 
             calendar_html=calendar_html, 
             month_name=calendar.month_name[month], 
             year=year, 
             css_file='styles.css',
+            events=filtered_events,
         ))
 
 class LoginView(FormView):
@@ -141,9 +146,21 @@ class PortfolioView(ListView):
     template_name = "portfolio.html"
     model = Student
     context_object_name = 'students'
-
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for student in context["students"]:
+            if not student.username.startswith('@'):
+                student.username = '@'+student.username
+        return context
 
 class DetailsPortfolioView(DetailView):
     template_name = "details/details_portfolio.html"
     model = Student
-    context_object_name = 'student'
+    context_object_name = 'students'
+
+    def get_object(self, queryset = None):
+        obj = super().get_object(queryset)
+        if not obj.username.startswith('@'):
+            obj.username = '@'+obj.username
+        return obj

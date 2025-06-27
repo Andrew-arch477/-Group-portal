@@ -4,6 +4,15 @@ import calendar
 
 # Create your models here.
 
+class Profile(models.Model):
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('moderator', 'Moderator'),
+        ('user', 'User'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
+
 class Forum(models.Model):
     title = models.CharField(max_length=200)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -65,8 +74,12 @@ class Student(models.Model):
 class Event(models.Model):
     MONTH_CHOICES = [(i, calendar.month_name[i]) for i in range(1, 13)]
 
-    name = models.CharField(max_length=30)
-    description = models.CharField(max_length=100)
-    time = models.TimeField()
-    date = models.IntegerField()
-    mounth = models.CharField(max_length=100, choices=MONTH_CHOICES)
+    name = models.CharField(max_length=30, unique=True)
+    description = models.CharField(max_length=100, blank=True, null=True)
+    time = models.TimeField(blank=True, null=True)
+    date = models.IntegerField(blank=True, null=True)
+    month = models.IntegerField(choices=MONTH_CHOICES, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+
+    def get_month_name(self):
+        return calendar.month_name[self.month]
