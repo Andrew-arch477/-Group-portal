@@ -411,6 +411,37 @@ h1 {
     margin-top: 3px;
 }
 .card {
+    background: var(--bg-dark);
+    color: var(--accent-color);
+    border: none;
+    border-radius: 8px;
+    transition: background-color .3s;
+}
+.card:hover {
+    background: #1f3145;
+}
+
+.card-title {
+    font-weight: 700;
+    color: var(--text-light);
+}
+
+.card-subtitle {
+    font-weight: 500;
+    color: #ced6e0;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #6b8ba4;
+}
+
+a.text-decoration-none {
+    color: inherit; 
+    text-decoration: none;
+}
+
+.card {
     background-color: #272727; 
     color: #9dc9ff;
     border: none;
@@ -441,7 +472,39 @@ h1 {
     color: #6b8ba4;
 }
 
-a.text-decoration-none {
-    color: inherit; /* Ссылка не ломает цвет карточки */
-    text-decoration: none;
+.github-link {
+    color: grey !important;
+}
+.github-link:hover {
+    color: grey !important;
+    text-decoration: none !important;
+    background-color: rgba(13, 77, 114, 0.14);
+}
+
+.favorite-project {
+    color: gold !important;
+}
+.favorite-project:hover {
+    background-color: rgba(174, 176, 15, 0.14);
+}
+
+.info-icon {
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.info-link {
+    color: inherit; 
+    text-decoration: none;    
+    cursor: pointer;
+    transition: opacity .2s;
+}
+.info-link:hover {
+    opacity: 0.8;
+}
+.username-item {
+    color: #433e3e;  
+    font-size: 2.3rem; 
 }
