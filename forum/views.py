@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView, TemplateView
-from .models import Forum, Message, Student, Subject, Grade
+from .models import Forum, Message, Student, Subject, Grade, Event
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import LoginForm, MessageForm, CalendarForm, GradeForm
@@ -18,6 +18,8 @@ class Calendar(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         now = datetime.now()
+
+        context['events'] = kwargs.get('events', Event.objects.all())
 
         if 'calendar_html' not in context:
             cal = calendar.HTMLCalendar(firstweekday=0)
@@ -35,12 +37,15 @@ class Calendar(FormView):
         cal = calendar.HTMLCalendar(firstweekday=0)
         calendar_html = cal.formatmonth(year, month)
 
+        filtered_events = Event.objects.filter(month=month, year=year)
+
         return self.render_to_response(self.get_context_data(
             form=form, 
             calendar_html=calendar_html, 
             month_name=calendar.month_name[month], 
             year=year, 
             css_file='styles.css',
+            events=filtered_events,
         ))
 
 class LoginView(FormView):
@@ -82,37 +87,83 @@ class DetailedForum(FormView):
     def dispatch(self, request, *args, **kwargs):
         self.forum_id = kwargs.get('forum_id')
         self.forum = None
+        self.action = None
         if self.forum_id:
             self.forum = Forum.objects.get(id=self.forum_id)
         return super().dispatch(request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
         forums = Forum.objects.all().order_by('-created_date')
-        messages = self.forum.message_set.all().order_by('created_date')
+        messages = self.forum.message_set.all().select_related('reply').order_by('created_date')
         context = self.get_context_data(forum=self.forum, messages=messages, forums=forums)
         context["css_file"] = 'styles.css'
         return render(request, 'detailed_forum.html', context)
+
+    def post(self, request, *args, **kwargs):
+        if "delete_id" in request.POST:
+            message_id = request.POST.get("delete_id")
+            message = Message.objects.get(id=message_id)
+
+            message.delete()
+            
+            return redirect('detailed_forum', forum_id=self.forum_id)
+        elif "edit_id" in request.POST:
+            self.action = "edit"
+            
+
+        return super().post(request, *args, **kwargs)
     
     def form_valid(self, form):
-        text=form.cleaned_data['text']
-        Message.objects.create(
-            forum=self.forum,
-            user=self.request.user,
-            text=text
-        )
+        if not self.request.user.is_authenticated:
+            return redirect('login')
+        text = form.cleaned_data['text']
+        reply_to_id = self.request.POST.get("reply_to_id")
+        edit_id = self.request.POST.get("edit_id")
+
+        if self.action == "edit" and edit_id:
+            message = Message.objects.get(id=edit_id, user=self.request.user)
+            message.text = text
+            message.save()
+
+        elif reply_to_id:
+            reply = Message.objects.get(id=reply_to_id)
+            Message.objects.create(
+                forum=self.forum,
+                user=self.request.user,
+                text=text,
+                reply=reply
+            )
+        else:
+            Message.objects.create(
+                forum=self.forum,
+                user=self.request.user,
+                text=text
+            )
+
         return redirect('detailed_forum', forum_id=self.forum_id)
 
 class PortfolioView(ListView):
     template_name = "portfolio.html"
     model = Student
     context_object_name = 'students'
-
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for student in context["students"]:
+            if not student.username.startswith('@'):
+                student.username = '@'+student.username
+        return context
 
 class DetailsPortfolioView(DetailView):
     template_name = "details/details_portfolio.html"
     model = Student
-    context_object_name = 'student'
+    context_object_name = 'students'
 
+    def get_object(self, queryset = None):
+        obj = super().get_object(queryset)
+        if not obj.username.startswith('@'):
+            obj.username = '@'+obj.username
+        return obj
 
 class GradebookHomeView(TemplateView):
     template_name = 'gradebook.html'
