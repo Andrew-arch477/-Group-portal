@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static css_file %}">
+    <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="">Group Portal</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'forums' %}">Forums</a>
+              </li>
+            </ul>
+              <div class="d-flex">
+              {% if user.is_authenticated %}
+                  <a href="" class="btn btn-outline-danger ms-2">Log out</a>
+              {% else %}
+                  <a href="{% url 'login' %}" class="btn btn-outline-primary ms-2">Log in</a>
+                  <a href="{% url 'register' %}" class="btn btn-outline-success ms-2">Register</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+    </nav>
+    <h1>List of all Forums</h1>
+    <div class="vertical_alignment">
+        {% if forums %}
+        {% for forum in forums %}
+        <div class="horizontal">
+            <a href="{% url 'detailed_forum' forum_id=forum.id %}">{{ forum.title }}</a>
+            <p>{{ forum.created_date }}</p>
+        </div>
+            <hr>
+            
+        {% endfor %}
+        {% endif %}
+        {% if not forums %}
+            <p>No forums yet</p>
+        {% endif %}
+
+    </div>
+    
+</body>
+</html>

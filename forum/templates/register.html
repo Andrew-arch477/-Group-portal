@@ -1,0 +1,10 @@
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+<h1>Реєстрація</h1>
+<form method="POST" class="center_div">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn_login">Зареєструватися</button>
+    <button type="button" class="btn_login" onclick="window.location.href='{% url 'login' %}'">Увійти</button>
+</form>
