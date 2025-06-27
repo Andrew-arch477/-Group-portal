@@ -7,7 +7,6 @@
     width: fit-content;           
     
     width: 80%;
-
 }
 
 .vertical_alignment_forum_list {
@@ -82,14 +81,12 @@
     margin-left: auto; 
     margin-right: 11px;
     font-weight: 600;
-
 }
 
 .p_not_me {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 19px;
     font-weight: 600;
-
 }
 
 .message_form {
@@ -102,7 +99,6 @@
     padding: 10px;
     border-top: 1px solid #ccc;
     z-index: 10;
-    
 }
   
 .message_form input {
@@ -147,7 +143,7 @@
     border-radius: 6px;
     cursor: pointer;
     width: 540px;
-  }
+}
   
 .btn_login:hover {
     background-color: #053c5c;
@@ -162,7 +158,7 @@
     border-radius: 6px;
     cursor: pointer;
     width: 540px;
-  }
+}
   
 .btn_event:hover {
     background-color: #053c5c;
@@ -204,8 +200,6 @@
     display: flex; 
     flex-direction: row;
     width: 100%;
-    
-
 }
 
 .vertical_alignment a {
@@ -214,8 +208,6 @@
     font-size: 18px;
     color: #2e2e2e;
     align-self: flex-start;
-    
-
 }
 
 .vertical_alignment p {
@@ -224,8 +216,6 @@
     color: #2e2e2e;
     align-self: flex-end;
     margin-left: auto;
-    
-
 }
 
 p {
@@ -239,10 +229,7 @@ hr {
     background-color: #0a0a0a; 
     border: none;
     color: #0a0a0a;
-
-
 }
-
 
 h1 {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -287,6 +274,93 @@ h1 {
     font-weight: bold;
     border: 2px solid #0c5460;
 }
+
 .btn_login + .btn_login {
     margin-top: 3px;
 }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th {
+    background-color: #34495e;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table tr:hover {
+    background-color: #e6f7ff;
+}
+
+.form-control, .form-select {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-height: 100px;
+}
+
+.invalid-feedback {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.list-group {
+    margin-bottom: 20px;
+}
+
+.list-group-item {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    margin-bottom: -1px;
+    background-color: white;
+    transition: all 0.3s;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+    text-decoration: none;
+}
+
