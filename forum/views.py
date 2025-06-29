@@ -179,7 +179,7 @@ class GradebookHomeView(TemplateView):
 class AddGradeView(FormView):
     template_name = 'add_grade.html'
     form_class = GradeForm
-    success_url = '/gradebookhome'
+    success_url = '/gradebook'
 
     def form_valid(self, form):
         form.save()
