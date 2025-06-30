@@ -34,18 +34,35 @@ class Calendar(FormView):
         month = int(form.cleaned_data['month'])
         year = int(form.cleaned_data['year'])
 
+        events = Event.objects.filter(month=month, year=year)
+
+        events_by_day = {}
+        for event in events:
+            if event.date:
+                day = event.date
+                if day not in events_by_day:
+                    events_by_day[day] = []
+                events_by_day[day].append(event)
+
         cal = calendar.HTMLCalendar(firstweekday=0)
         calendar_html = cal.formatmonth(year, month)
 
-        filtered_events = Event.objects.filter(month=month, year=year)
+        for day, list_events_day in events_by_day.items():
+            events_html = ''.join(
+                f"<div class='event'>{event.name}</div>"
+                for event in list_events_day
+            )
+            search = f">{day}<"
+            replace = f">{day}<br>{events_html}<"
+            calendar_html = calendar_html.replace(search, replace)
 
         return self.render_to_response(self.get_context_data(
-            form=form, 
-            calendar_html=calendar_html, 
-            month_name=calendar.month_name[month], 
-            year=year, 
+            form=form,
+            calendar_html=calendar_html,
+            month_name=calendar.month_name[month],
+            year=year,
             css_file='styles.css',
-            events=filtered_events,
+            events=events
         ))
 
 class LoginView(FormView):
