@@ -98,3 +98,9 @@ class Event(models.Model):
 
     def get_month_name(self):
         return calendar.month_name[self.month]
+
+class Works(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    title = models.CharField(max_length=40,blank=False,null=False)
+    description = models.TextField()
+    url = models.URLField(blank=False,null=False)
