@@ -258,6 +258,28 @@
     background-color: #053c5c;
 }
 
+.add_btn {
+    color: rgb(197, 30, 30);
+    background-color: #0a0a0a;
+}
+
+.add_btn:hover {
+    background-color: #053c5c;
+}
+
+.custom-btn {
+    color: rgb(255, 255, 255) !important; 
+    border-radius: 3px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    color: #0e0e0e;
+    font-size: 18px !important;
+    width: 130px;
+    height: 45px;
+    text-align: center !important;
+    background-color: #0d4d72;
+    margin-bottom: 50px;
+}
+
 .btn_login {
     padding: 10px 20px;
     font-size: 16px;

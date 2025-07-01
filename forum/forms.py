@@ -13,6 +13,9 @@ class MessageForm(forms.Form):
             'placeholder': 'Напиши щось...'
         })
 )
+    
+class ForumForm(forms.Form):
+    title = forms.CharField(max_length=255, label='Title', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Type here...'}))
 
 class CalendarForm(forms.Form):
     MONTH_CHOICES = [(i, calendar.month_name[i]) for i in range(1, 13)]

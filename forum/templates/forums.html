@@ -38,6 +38,16 @@
     </nav>
     <h1>List of all Forums</h1>
     <div class="vertical_alignment">
+        {% if role == 'admin' or role == 'moderator' %}
+          <button onclick="open_add_form()" class="btn btn-primary custom-btn">Add Forum</button>
+        {% endif %}
+        <div id="add_form" style="display: none;">
+            <form method="post" class="">
+                {% csrf_token %}
+                {{form.title}}
+                <button type="submit" class="send"><i class="las la-plus"></i></button>
+            </form>
+        </div>
         {% if forums %}
         {% for forum in forums %}
         <div class="horizontal">
@@ -53,6 +63,13 @@
         {% endif %}
 
     </div>
+    <script>
+      function open_add_form() {
+          document.getElementById(
+              "add_form"
+          ).style.display = "block";
+      }
+    </script>
     
 </body>
 </html>

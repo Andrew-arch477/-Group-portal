@@ -6,7 +6,7 @@ from django.views.generic import FormView, CreateView, TemplateView, ListView, D
 from .models import Forum, Message, Student, Subject, Grade, Event
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import LoginForm, MessageForm, CalendarForm, GradeForm
+from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm
 from datetime import datetime
 import calendar
 
@@ -86,16 +86,28 @@ class RegisterView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
 
-class Forums(View):
-    def get_context_data(self, **kwargs):
-        context = kwargs
-        context["css_file"] = 'styles.css'
-        return context
+class Forums(FormView):
+    form_class = ForumForm
+    template_name = 'forums.html'
+    success_url = '/forums/'
     
     def get(self, request):
         forums = Forum.objects.all().order_by('-created_date')
-        context = self.get_context_data(forums=forums)
+        user_role = self.request.user.profile.role
+        context = self.get_context_data(forums=forums, role=user_role)
+        context["css_file"] = 'styles.css'
         return render(request, 'forums.html', context)
+
+    def form_valid(self, form):
+        if not self.request.user.is_authenticated:
+            return redirect('login')
+        title = form.cleaned_data['title']
+
+        Forum.objects.create(
+            title=title
+        )
+
+        return redirect('forums')
 
 class DetailedForum(FormView):
     form_class = MessageForm
