@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views import View
 from django.urls import reverse_lazy
-from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView
-from .models import Forum, Message, Student, Event
+from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView, TemplateView
+from .models import Forum, Message, Student, Subject, Grade, Event
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import LoginForm, MessageForm, CalendarForm
+from .forms import LoginForm, MessageForm, CalendarForm, GradeForm
 from datetime import datetime
 import calendar
 
@@ -34,18 +34,35 @@ class Calendar(FormView):
         month = int(form.cleaned_data['month'])
         year = int(form.cleaned_data['year'])
 
+        events = Event.objects.filter(month=month, year=year)
+
+        events_by_day = {}
+        for event in events:
+            if event.date:
+                day = event.date
+                if day not in events_by_day:
+                    events_by_day[day] = []
+                events_by_day[day].append(event)
+
         cal = calendar.HTMLCalendar(firstweekday=0)
         calendar_html = cal.formatmonth(year, month)
 
-        filtered_events = Event.objects.filter(month=month, year=year)
+        for day, list_events_day in events_by_day.items():
+            events_html = ''.join(
+                f"<div class='event'>{event.name}</div>"
+                for event in list_events_day
+            )
+            search = f">{day}<"
+            replace = f">{day}<br>{events_html}<"
+            calendar_html = calendar_html.replace(search, replace)
 
         return self.render_to_response(self.get_context_data(
-            form=form, 
-            calendar_html=calendar_html, 
-            month_name=calendar.month_name[month], 
-            year=year, 
+            form=form,
+            calendar_html=calendar_html,
+            month_name=calendar.month_name[month],
+            year=year,
             css_file='styles.css',
-            events=filtered_events,
+            events=events
         ))
 
 class LoginView(FormView):
@@ -164,3 +181,40 @@ class DetailsPortfolioView(DetailView):
         if not obj.username.startswith('@'):
             obj.username = '@'+obj.username
         return obj
+
+class GradebookHomeView(TemplateView):
+    template_name = 'gradebook.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['grades'] = Grade.objects.all().order_by('-date')
+        context['students'] = Student.objects.all()
+        context['subject'] = Subject.objects.get(subject_name='Python')
+        return context
+
+
+class AddGradeView(FormView):
+    template_name = 'add_grade.html'
+    form_class = GradeForm
+    success_url = '/gradebook'
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subject'] = Subject.objects.get(subject_name='Python')
+        return context
+
+
+class StudentGradesView(TemplateView):
+    template_name = 'student_grades.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        student_id = self.kwargs['student_id']
+        context['student'] = Student.objects.get(pk=student_id)
+        context['grades'] = Grade.objects.filter(student=student_id).order_by('-date')
+        context['subject'] = Subject.objects.get(subject_name='Python')
+        return context
