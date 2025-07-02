@@ -21,11 +21,14 @@
             {{ calendar_html|safe }}
         </div>
 
-        <form method="post" class="center_div_calender">
-            {% for event in events %}
-                <li>{{ event.name }} - {{ event.date }} - {{ event.description }} - {{ event.time }} - {{event.mounth}} - {{ event.year }}</li>
-            {% endfor %}
-        </form>
+
+        {% for event in events %}
+            <form method="post" class="center_div_calender"></form>
+                {% csrf_token %}
+                <li>{{ event.name }} - {{ event.date }} - {{ event.description }} - {{ event.time }} - {{event.mounth}} - {{ event.year }} <a href="{% url 'calendar_event_delete' event.id %}"><button class="btn btn-danger">Delete</button></a></li>
+            </form>
+        {% endfor %}
+
     </div>
 
 </body>

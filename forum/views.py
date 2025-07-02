@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views import View
 from django.urls import reverse_lazy
-from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView, TemplateView
+from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView, TemplateView, DeleteView, UpdateView
 from .models import Forum, Message, Student, Subject, Grade, Event
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -64,6 +64,11 @@ class Calendar(FormView):
             css_file='styles.css',
             events=events
         ))
+
+class Event_delete(DeleteView):
+    model = Event
+    template_name = 'calendar_event_delete.html'
+    success_url = reverse_lazy('calendar_event')
 
 class LoginView(FormView):
     template_name = 'login.html'
