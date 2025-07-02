@@ -3,13 +3,13 @@ from django.contrib.auth import authenticate, login
 from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView, TemplateView
-from .models import Forum, Message, Student, Subject, Grade, Event
+from .models import Forum, Message, Student, Subject, Grade, Event, Works
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import LoginForm, MessageForm, CalendarForm, GradeForm
 from datetime import datetime
 import calendar
-
+from django.contrib.auth.models import User
 
 class Calendar(FormView):
     template_name = 'calendar_event.html'
@@ -174,7 +174,12 @@ class PortfolioView(ListView):
 class DetailsPortfolioView(DetailView):
     template_name = "details/details_portfolio.html"
     model = Student
-    context_object_name = 'students'
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailsPortfolioView, self).get_context_data(**kwargs)
+        context['students'] = Student.objects.get(pk=self.kwargs['pk'])
+        context['works'] = Works.objects.filter(user_id=User.objects.get(pk=self.kwargs['pk']))
+        return context
 
     def get_object(self, queryset = None):
         obj = super().get_object(queryset)
