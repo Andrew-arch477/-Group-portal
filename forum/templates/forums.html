@@ -42,7 +42,7 @@
           <button onclick="open_add_form()" class="btn btn-primary custom-btn">Add Forum</button>
         {% endif %}
         <div id="add_form" style="display: none;">
-            <form method="post" class="">
+            <form method="post" class="add_forum">
                 {% csrf_token %}
                 {{form.title}}
                 <button type="submit" class="send"><i class="las la-plus"></i></button>
@@ -53,8 +53,35 @@
         <div class="horizontal">
             <a href="{% url 'detailed_forum' forum_id=forum.id %}">{{ forum.title }}</a>
             <p>{{ forum.created_date }}</p>
+            {% if role == 'admin' or role == 'moderator' %}
+              <div class="buttons_group_home">
+                  <button type="button" onclick="open_edit_form('{{ forum.id }}')" class="buttons_group_buttons_edit">Edit</button>
+                  <button type="button" onclick="open_delete_form('{{ forum.id }}')" class="buttons_group_buttons_delete">Delete</button>
+              </div>
+            {% endif %}
+
         </div>
             <hr>
+        <div id="delete_form_{{ forum.id }}" class="popup" style="display: none;">
+          <div class="popup_content">
+              <form method="post">
+                  {% csrf_token %}
+                  <div class="popup-content"></div>
+                  <input type="hidden" name="delete_id" value="{{ forum.id }}">
+                  <p>Are you sure you want to delete this forum?</p>
+                  <button type="submit" name="delete" class="buttons_group_buttons_delete">Delete</button>
+                  <button type="button" onclick="close_delete_form('{{ forum.id }}')" class="buttons_group_buttons_edit">Close</button>
+              </form>
+          </div>
+        </div>
+        <div id="edit_form_{{ forum.id }}" style="display: none;">
+          <form method="post" class="add_forum">
+              {% csrf_token %}
+              <input type="hidden" name="edit_id" value="{{ forum.id }}">
+              <textarea name="title" class="form-control" rows="1" style="width: 90%;" required>{{ forum.title }}</textarea>
+              <button type="submit" class="save">Save</button>
+          </form>
+        </div>
             
         {% endfor %}
         {% endif %}
@@ -67,6 +94,21 @@
       function open_add_form() {
           document.getElementById(
               "add_form"
+          ).style.display = "block";
+      }
+      function open_delete_form(forumId) {
+          document.getElementById(
+              `delete_form_${forumId}`
+          ).style.display = "block";
+      }
+      function close_delete_form(forumId) {
+        document.getElementById(
+            `delete_form_${forumId}`
+        ).style.display = "none";
+      }
+      function open_edit_form(forumId) {
+          document.getElementById(
+              `edit_form_${forumId}`
           ).style.display = "block";
       }
     </script>
