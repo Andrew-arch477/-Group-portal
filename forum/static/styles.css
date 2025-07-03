@@ -594,3 +594,7 @@ body {
     text-decoration: none;
 }
 
+.container.my-5 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
