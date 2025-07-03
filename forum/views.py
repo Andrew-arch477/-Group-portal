@@ -217,6 +217,11 @@ class DeleteGradeView(DeleteView):
     template_name = 'delete_grade.html'
     success_url = '/gradebook'
 
+class EditGradeView(UpdateView):
+    model = Grade
+    form_class = GradeForm
+    template_name = 'edit_grade.html'
+    success_url = '/gradebook'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
