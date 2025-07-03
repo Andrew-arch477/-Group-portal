@@ -4,7 +4,11 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView
+from django.views.generic.edit import FormView
+from .models import Student, Forum, Message, Grade, Event, Works, Subject
 from .forms import LoginForm, MessageForm, CalendarForm, GradeForm
+from .mixins import UserIsAdminMixin
 from datetime import datetime
 import calendar
 from django.contrib.auth.models import User
@@ -89,7 +93,7 @@ class RegisterView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
 
-class Forums(View):
+class Forums(UserIsAdminMixin, View):
     def get_context_data(self, **kwargs):
         context = kwargs
         context["css_file"] = 'styles.css'
