@@ -279,6 +279,21 @@ class AddGradeView(FormView):
         context['subject'] = Subject.objects.get(subject_name='Python')
         return context
 
+class DeleteGradeView(DeleteView):
+    model = Grade
+    template_name = 'delete_grade.html'
+    success_url = '/gradebook'
+
+class EditGradeView(UpdateView):
+    model = Grade
+    form_class = GradeForm
+    template_name = 'edit_grade.html'
+    success_url = '/gradebook'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subject'] = Subject.objects.get(subject_name='Python')
+        return context
 
 class StudentGradesView(TemplateView):
     template_name = 'student_grades.html'
@@ -290,3 +305,5 @@ class StudentGradesView(TemplateView):
         context['grades'] = Grade.objects.filter(student=student_id).order_by('-date')
         context['subject'] = Subject.objects.get(subject_name='Python')
         return context
+
+

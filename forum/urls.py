@@ -14,7 +14,10 @@ urlpatterns = [
 
     path('portfolio/', PortfolioView.as_view(), name='portfolio'),
     path('details_portfolio/<pk>', DetailsPortfolioView.as_view(), name='details_portfolio'),
+    
     path('gradebook/', GradebookHomeView.as_view(), name='gradebook'),
     path('add/', AddGradeView.as_view(), name='add_grade'),
+    path('edit/<int:pk>/', EditGradeView.as_view(), name='edit_grade'),
+    path('delete/<int:pk>/', DeleteGradeView.as_view(), name='delete_grade'),
     path('student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
 ]
