@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.views import View
 from django.urls import reverse_lazy
@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView
 from django.views.generic.edit import FormView
 from .models import Student, Forum, Message, Grade, Event, Works, Subject
-from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm
+from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, EventForm
 from datetime import datetime
 import calendar
 from django.contrib.auth.models import User
@@ -70,6 +70,26 @@ class Event_delete(DeleteView):
     model = Event
     template_name = 'calendar_event_delete.html'
     success_url = reverse_lazy('calendar_event')
+
+class Event_update(FormView):
+    template_name = 'calendar_event_update.html'
+    form_class = EventForm
+    success_url = reverse_lazy('calendar_event')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        event_id = self.kwargs.get('pk')
+        event = Event.objects.get(pk=event_id)
+        kwargs['instance'] = event
+        return kwargs
+
+    def form_valid(self, form):
+        form.save() 
+        return super().form_valid(form)
+    
+    def get_object(self):
+        event_id = self.kwargs.get('pk')
+        return get_object_or_404(Event, pk=event_id)
 
 class LoginView(FormView):
     template_name = 'login.html'
