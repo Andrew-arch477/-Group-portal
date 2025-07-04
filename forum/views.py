@@ -7,8 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView
 from django.views.generic.edit import FormView
 from .models import Student, Forum, Message, Grade, Event, Works, Subject
-from .forms import LoginForm, MessageForm, CalendarForm, GradeForm
-from .mixins import UserIsAdminMixin
+from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm
 from datetime import datetime
 import calendar
 from django.contrib.auth.models import User
@@ -93,16 +92,58 @@ class RegisterView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
 
-class Forums(UserIsAdminMixin, View):
-    def get_context_data(self, **kwargs):
-        context = kwargs
-        context["css_file"] = 'styles.css'
-        return context
+class Forums(FormView):
+    form_class = ForumForm
+    template_name = 'forums.html'
+    success_url = '/forums/'
+    
+    def dispatch(self, request, *args, **kwargs):
+        self.action = None
+        return super().dispatch(request, *args, **kwargs)
     
     def get(self, request):
         forums = Forum.objects.all().order_by('-created_date')
-        context = self.get_context_data(forums=forums)
+        user_role = self.request.user.profile.role
+        context = self.get_context_data(forums=forums, role=user_role)
+        context["css_file"] = 'styles.css'
         return render(request, 'forums.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        if "delete_id" in request.POST:
+            forum_id = request.POST.get("delete_id")
+            forum = Forum.objects.get(id=forum_id)
+
+            forum.delete()
+            
+            return redirect('forums')
+        elif "edit_id" in request.POST:
+            edit_id = self.request.POST.get("edit_id")
+            #self.action = "edit"
+            forum = Forum.objects.get(id=edit_id)
+            forum.title = request.POST.get('title')
+            forum.save()
+            return redirect("forums")
+            
+
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        if not self.request.user.is_authenticated:
+            return redirect('login')
+        title = form.cleaned_data['title']
+
+        edit_id = self.request.POST.get("edit_id")
+
+        if self.action == "edit" and edit_id:
+            forum = Forum.objects.get(id=edit_id)
+            forum.title = title
+            forum.save()
+        else:
+            Forum.objects.create(
+            title=title
+        )
+
+        return redirect('forums')
 
 class DetailedForum(FormView):
     form_class = MessageForm
