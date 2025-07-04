@@ -7,7 +7,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView
 from django.views.generic.edit import FormView
 from .models import Student, Forum, Message, Grade, Event, Works, Subject
-from .forms import LoginForm, MessageForm, CalendarForm, GradeForm
 from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm
 from datetime import datetime
 import calendar
