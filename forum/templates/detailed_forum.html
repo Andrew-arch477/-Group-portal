@@ -78,7 +78,7 @@
                     
                     
                 </div>
-                <div class="message_block">
+                <div class="message_block_not_me">
                     {% if message.reply %}
                         <div class="replied_me">
                             <p>Replied to {{ message.reply.user }}</p>
@@ -145,7 +145,6 @@
                 
 
                 <div id="reply_form_{{ message.id }}" style="display: none;">
-                    It's for replies
                     <form method="post" class="message_form">
                         {% csrf_token %}
                         <input type="hidden" name="reply_to_id" value="{{ message.id }}">

@@ -1,15 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.views import View
 from django.urls import reverse_lazy
-from django.views.generic import FormView, CreateView, TemplateView, ListView, DetailView, TemplateView, DeleteView, UpdateView
-from .models import Forum, Message, Student, Subject, Grade, Event
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import LoginForm, MessageForm, CalendarForm, GradeForm
+from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView
+from django.views.generic.edit import FormView
+from .models import Student, Forum, Message, Grade, Event, Works, Subject
+from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, EventForm
 from datetime import datetime
 import calendar
-
+from django.contrib.auth.models import User
 
 class Calendar(FormView):
     template_name = 'calendar_event.html'
@@ -70,6 +71,26 @@ class Event_delete(DeleteView):
     template_name = 'calendar_event_delete.html'
     success_url = reverse_lazy('calendar_event')
 
+class Event_update(FormView):
+    template_name = 'calendar_event_update.html'
+    form_class = EventForm
+    success_url = reverse_lazy('calendar_event')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        event_id = self.kwargs.get('pk')
+        event = Event.objects.get(pk=event_id)
+        kwargs['instance'] = event
+        return kwargs
+
+    def form_valid(self, form):
+        form.save() 
+        return super().form_valid(form)
+    
+    def get_object(self):
+        event_id = self.kwargs.get('pk')
+        return get_object_or_404(Event, pk=event_id)
+
 class LoginView(FormView):
     template_name = 'login.html'
     form_class = LoginForm
@@ -91,16 +112,58 @@ class RegisterView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
 
-class Forums(View):
-    def get_context_data(self, **kwargs):
-        context = kwargs
-        context["css_file"] = 'styles.css'
-        return context
+class Forums(FormView):
+    form_class = ForumForm
+    template_name = 'forums.html'
+    success_url = '/forums/'
+    
+    def dispatch(self, request, *args, **kwargs):
+        self.action = None
+        return super().dispatch(request, *args, **kwargs)
     
     def get(self, request):
         forums = Forum.objects.all().order_by('-created_date')
-        context = self.get_context_data(forums=forums)
+        user_role = self.request.user.profile.role
+        context = self.get_context_data(forums=forums, role=user_role)
+        context["css_file"] = 'styles.css'
         return render(request, 'forums.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        if "delete_id" in request.POST:
+            forum_id = request.POST.get("delete_id")
+            forum = Forum.objects.get(id=forum_id)
+
+            forum.delete()
+            
+            return redirect('forums')
+        elif "edit_id" in request.POST:
+            edit_id = self.request.POST.get("edit_id")
+            #self.action = "edit"
+            forum = Forum.objects.get(id=edit_id)
+            forum.title = request.POST.get('title')
+            forum.save()
+            return redirect("forums")
+            
+
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        if not self.request.user.is_authenticated:
+            return redirect('login')
+        title = form.cleaned_data['title']
+
+        edit_id = self.request.POST.get("edit_id")
+
+        if self.action == "edit" and edit_id:
+            forum = Forum.objects.get(id=edit_id)
+            forum.title = title
+            forum.save()
+        else:
+            Forum.objects.create(
+            title=title
+        )
+
+        return redirect('forums')
 
 class DetailedForum(FormView):
     form_class = MessageForm
@@ -179,7 +242,12 @@ class PortfolioView(ListView):
 class DetailsPortfolioView(DetailView):
     template_name = "details/details_portfolio.html"
     model = Student
-    context_object_name = 'students'
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailsPortfolioView, self).get_context_data(**kwargs)
+        context['students'] = Student.objects.get(pk=self.kwargs['pk'])
+        context['works'] = Works.objects.filter(user_id=User.objects.get(pk=self.kwargs['pk']))
+        return context
 
     def get_object(self, queryset = None):
         obj = super().get_object(queryset)

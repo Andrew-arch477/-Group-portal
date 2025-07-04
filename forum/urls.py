@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('eventcalendar/', Calendar.as_view(), name='calendar_event'),
     path('eventdelete/<int:pk>/', Event_delete.as_view(), name='calendar_event_delete'),
+    path('eventupdate/<int:pk>/', Event_update.as_view(), name='calendar_event_update'),
 
     path('portfolio/', PortfolioView.as_view(), name='portfolio'),
     path('details_portfolio/<pk>', DetailsPortfolioView.as_view(), name='details_portfolio'),

@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event_work</title>
+    <link rel="stylesheet" href="{% static 'styles/first.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+</head>
+
+<body>
+    <center>
+        <h1>Форма для оновлення події</h1>
+    </center>
+
+        <form method="POST">
+            {% csrf_token %}
+    
+            <div id = 'form-container'>
+                {{ form.as_p }}
+                <p></p>
+                <center>
+                    <button type="submit", class="btn btn-warning">Оновити</button>
+                </center>
+                <p></p>
+            </div>
+        </form>
+        <center>
+            <a href="{% url 'calendar_event' %}"><button type="submit", class="btn btn-secondary">Назад</button></a>
+        </center>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+
+</body>

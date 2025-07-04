@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 import calendar
-from .models import Grade, Subject
+from .models import Grade, Subject, Event
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Type here...'}))
@@ -13,12 +13,42 @@ class MessageForm(forms.Form):
             'placeholder': 'Напиши щось...'
         })
 )
+    
+class ForumForm(forms.Form):
+    title = forms.CharField(max_length=255, label='Title', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Type here...'}))
 
 class CalendarForm(forms.Form):
     MONTH_CHOICES = [(i, calendar.month_name[i]) for i in range(1, 13)]
     
     month = forms.ChoiceField(choices=MONTH_CHOICES, widget=forms.Select(attrs={'class': 'form-control',}))
     year = forms.IntegerField(min_value=1900, max_value=2100, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter year',}))
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['name', 'description', 'time', 'date', 'month', 'year']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': "Назва події",
+                'autofocus': 'autofocus',
+            }),
+            'description': forms.TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'time': forms.TimeInput(attrs={
+                'class': 'form-control',
+            }),
+            'date': forms.NumberInput(attrs={
+                'class': 'form-control',
+            }),
+            'month': forms.Select(attrs={
+                'class': 'form-control',
+            }),
+            'year': forms.NumberInput(attrs={
+                'class': 'form-control',
+            }),
+        }
 
 class GradeForm(forms.ModelForm):
     class Meta:
