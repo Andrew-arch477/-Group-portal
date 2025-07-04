@@ -138,7 +138,6 @@ class Forums(FormView):
             return redirect('forums')
         elif "edit_id" in request.POST:
             edit_id = self.request.POST.get("edit_id")
-            #self.action = "edit"
             forum = Forum.objects.get(id=edit_id)
             forum.title = request.POST.get('title')
             forum.save()
