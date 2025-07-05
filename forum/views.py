@@ -4,7 +4,7 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView
+from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView, UpdateView
 from django.views.generic.edit import FormView
 from .models import Student, Forum, Message, Grade, Event, Works, Subject
 from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, EventForm
@@ -90,6 +90,22 @@ class Event_update(FormView):
     def get_object(self):
         event_id = self.kwargs.get('pk')
         return get_object_or_404(Event, pk=event_id)
+
+class Event_create(FormView):
+    template_name = 'calendar_event_create.html'
+    form_class = EventForm
+    success_url = reverse_lazy('calendar_event')
+
+    def form_valid(self, form):
+        Event.objects.create(
+            name=form.cleaned_data['name'],
+            description=form.cleaned_data['description'],
+            time=form.cleaned_data['time'],
+            date=form.cleaned_data['date'],
+            month=form.cleaned_data['month'],
+            year=form.cleaned_data['year']
+        )
+        return super().form_valid(form)
 
 class LoginView(FormView):
     template_name = 'login.html'

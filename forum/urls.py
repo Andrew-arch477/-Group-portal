@@ -9,6 +9,7 @@ urlpatterns = [
     path('detailed_forum/<int:forum_id>/', DetailedForum.as_view(), name='detailed_forum'),
 
     path('eventcalendar/', Calendar.as_view(), name='calendar_event'),
+    path('eventcreate/', Event_create.as_view(), name='calendar_event_create'),
     path('eventdelete/<int:pk>/', Event_delete.as_view(), name='calendar_event_delete'),
     path('eventupdate/<int:pk>/', Event_update.as_view(), name='calendar_event_update'),
 
