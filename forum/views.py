@@ -4,7 +4,7 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView
+from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView, UpdateView
 from django.views.generic.edit import FormView
 from .models import Student, Forum, Message, Grade, Event, Works, Subject
 from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, EventForm
