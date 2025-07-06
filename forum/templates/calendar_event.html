@@ -21,6 +21,8 @@
             {{ calendar_html|safe }}
         </div>
 
+        <a href="{% url 'calendar_event_create'%}"><button class="btn btn-success">Create</button></a>
+
 
         {% for event in events %}
             <form method="post" class="center_div_calender"></form>

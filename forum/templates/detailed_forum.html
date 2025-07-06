@@ -80,7 +80,7 @@
                 </div>
                 <div class="message_block_not_me">
                     {% if message.reply %}
-                        <div class="replied_me">
+                        <div class="replied_not_me">
                             <p>Replied to {{ message.reply.user }}</p>
                         </div>
                     {% endif %}
@@ -148,8 +148,15 @@
                     <form method="post" class="message_form">
                         {% csrf_token %}
                         <input type="hidden" name="reply_to_id" value="{{ message.id }}">
+                        <div class="vertical">
+                        <div class="replying_to">
+                            Replying to <b>@{{ message.user }}</b>
+                        </div>
+                        <div class="form_body">
                         {{form.text}}
                         <button type="submit" class="send"><i class="lar la-paper-plane"></i></button>
+                        </div>
+                        </div>
                     </form>
                 </div>
                 <div id="edit_form_{{ message.id }}" style="display: none;">

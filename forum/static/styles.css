@@ -56,17 +56,19 @@
 }
 
 .message {
-    max-width: 60%;
     background-color: #cee2e7;
     padding: 12px 16px;
-    margin: 10px;
-    border-radius: 0 12px 12px 12px; 
+    margin: 0;
+    border-radius: 0 12px 12px 12px;
     font-family: 'Hanken Grotesk', sans-serif;
     color: #333;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 40%;
 }
 
 .replied_me {
-    background-color: #578dcc;
+    background-color: #7bb0ec;
     color: white;
     padding: 6px 12px;
     border-radius: 12px 0 0 0;
@@ -74,6 +76,39 @@
     width: 100%;
     box-sizing: border-box;
     max-width: 40%; 
+}
+
+.replied_not_me {
+    background-color: #7bb0ec;
+    color: white!important;
+    padding: 6px 12px;
+    border-radius: 0 12px 0 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 40%; 
+}
+
+.replying_to {
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.vertical {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form_body {
+    width: 100%;
+    display: flex;
+    flex-direction: row; 
 }
 
 .message_me {
@@ -155,11 +190,12 @@
     bottom: 0;
     left: 1;
     width: 65%;
-    background-color: #fff;
+    background-color: #f3f3f3;
     display: flex;
     padding: 10px;
     border-top: 1px solid #ccc;
     z-index: 10;
+    box-sizing: border-box;
     
 }
 
@@ -413,11 +449,32 @@
     border-radius: 6px;
     cursor: pointer;
     width: 540px;
-  }
-  
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
 .btn_login:hover {
     background-color: #053c5c;
 }
+
+.btn_login_new {
+    display: inline-block; 
+    width: 540px; 
+    padding: 10px 20px;
+    background-color: #0d4d72;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn_login_new:hover {
+    background-color: #053c5c;
+}
+  
+
 
 .btn_event {
     padding: 10px 20px;
