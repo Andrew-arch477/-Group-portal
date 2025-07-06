@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import calendar
+from django.utils import timezone
 
 # Create your models here.
 
@@ -104,3 +105,22 @@ class Works(models.Model):
     title = models.CharField(max_length=40,blank=False,null=False)
     description = models.TextField()
     url = models.URLField(blank=False,null=False)
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def str(self):
+        return self.name
+
+class Advertisement(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    def str(self):
+        return self.title
