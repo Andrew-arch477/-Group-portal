@@ -20,6 +20,7 @@ class Calendar(FormView):
         context = super().get_context_data(**kwargs)
         now = datetime.now()
 
+        # Load all events or filtered ones passed from form_valid
         context['events'] = kwargs.get('events', Event.objects.all())
 
         if 'calendar_html' not in context:
@@ -28,7 +29,11 @@ class Calendar(FormView):
             context['calendar_html'] = calendar_html
             context['month_name'] = calendar.month_name[now.month]
             context['year'] = now.year
-            context['css_file'] = 'styles.css'
+
+        # Add the CSS and user role to context, just like Forum.get()
+        context['css_file'] = 'styles.css'
+        context['role'] = getattr(self.request.user.profile, 'role', None)
+
         return context
 
     def form_valid(self, form):
@@ -36,8 +41,8 @@ class Calendar(FormView):
         year = int(form.cleaned_data['year'])
 
         events = Event.objects.filter(month=month, year=year)
-
         events_by_day = {}
+
         for event in events:
             if event.date:
                 day = event.date
@@ -279,7 +284,6 @@ class GradebookHomeView(TemplateView):
         context['students'] = Student.objects.all()
         context['subject'] = Subject.objects.get(subject_name='Python')
         return context
-
 
 class AddGradeView(FormView):
     template_name = 'add_grade.html'
