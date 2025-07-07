@@ -242,6 +242,18 @@ class DetailedForum(FormView):
 
         return redirect('detailed_forum', forum_id=self.forum_id)
 
+class HomeView(View):
+    def get_context_data(self, **kwargs):
+        context = kwargs
+        context["css_file"] = 'styles.css'
+        return context
+    
+    def get(self, request):
+        user = request.user
+
+        context = self.get_context_data()
+        return render(request, 'home.html', context)
+
 class PortfolioView(ListView):
     template_name = "portfolio.html"
     model = Student
