@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from django.views import View
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,7 +9,6 @@ from .models import Student, Forum, Message, Grade, Event, Works, Subject
 from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, EventForm
 from datetime import datetime
 import calendar
-from django.contrib.auth.models import User
 
 class Calendar(FormView):
     template_name = 'calendar_event.html'
@@ -266,7 +264,7 @@ class DetailsPortfolioView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailsPortfolioView, self).get_context_data(**kwargs)
         context['students'] = Student.objects.get(pk=self.kwargs['pk'])
-        context['works'] = Works.objects.filter(user_id=User.objects.get(pk=self.kwargs['pk']))
+        context['works'] = Works.objects.filter(student_id=Student.objects.get(pk=self.kwargs['pk']))
         return context
 
     def get_object(self, queryset = None):
@@ -325,5 +323,3 @@ class StudentGradesView(TemplateView):
         context['grades'] = Grade.objects.filter(student=student_id).order_by('-date')
         context['subject'] = Subject.objects.get(subject_name='Python')
         return context
-
-
