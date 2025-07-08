@@ -130,4 +130,5 @@ class Vote(models.Model):
     description = models.TextField(null=False,blank=False)
 
 class VariantOfVote(models.Model):
+    vote = models.ForeignKey(Vote,on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
