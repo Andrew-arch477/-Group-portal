@@ -128,3 +128,6 @@ class Advertisement(models.Model):
 class Vote(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=False,blank=False)
+
+class VariantOfVote(models.Model):
+    name = models.CharField(max_length=100)
