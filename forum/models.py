@@ -101,7 +101,7 @@ class Event(models.Model):
         return calendar.month_name[self.month]
 
 class Works(models.Model):
-    student = models.ForeignKey(Student,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     title = models.CharField(max_length=40,blank=False,null=False)
     description = models.TextField()
     url = models.URLField(blank=False,null=False)
