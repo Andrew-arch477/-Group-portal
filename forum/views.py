@@ -12,6 +12,9 @@ from datetime import datetime
 import calendar
 from django.contrib.auth.models import User
 
+class HomePage(TemplateView):
+    template_name = 'home.html'
+
 class Calendar(FormView):
     template_name = 'calendar_event.html'
     form_class = CalendarForm
