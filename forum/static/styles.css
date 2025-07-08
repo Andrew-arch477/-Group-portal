@@ -801,3 +801,25 @@ body {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
+.nav_links {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+
+.nav_btn {
+  background-color: #0d4d72;
+  color: white;
+  text-decoration: none;
+  font-family: 'Hanken Grotesk', sans-serif;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.nav_btn:hover {
+  background-color: #053c5c;
+}

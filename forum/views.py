@@ -10,6 +10,9 @@ from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, E
 from datetime import datetime
 import calendar
 
+class HomePage(TemplateView):
+    template_name = 'home.html'
+
 class Calendar(FormView):
     template_name = 'calendar_event.html'
     form_class = CalendarForm
