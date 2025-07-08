@@ -21,17 +21,20 @@
             {{ calendar_html|safe }}
         </div>
 
-        <a href="{% url 'calendar_event_create'%}"><button class="btn btn-success">Create</button></a>
+        {% if role == 'admin' or role == 'moderator' %}
+            <a href="{% url 'calendar_event_create'%}"><button class="btn btn-success">Create</button></a>
+        {% endif %}
 
-
-        {% for event in events %}
-            <form method="post" class="center_div_calender"></form>
-                {% csrf_token %}
-                <li>{{ event.name }} - {{ event.date }} - {{ event.description }} - {{ event.time }} - {{event.mounth}} - {{ event.year }} 
-                    <a href="{% url 'calendar_event_delete' event.id %}"><button class="btn btn-danger">Delete</button></a> 
-                    <a href="{% url 'calendar_event_update' event.id %}"><button class="btn btn-warning">Update</button></a></li>
-            </form>
-        {% endfor %}
+        <ul>
+            {% for event in events %}
+                <li>{{ event.name }} - {{ event.date }} - {{ event.description }} - {{ event.time }} - {{ event.month }} - {{ event.year }}
+                    {% if role == 'admin' or role == 'moderator' %}
+                        <a href="{% url 'calendar_event_delete' event.id %}"><button class="btn btn-danger">Delete</button></a>
+                        <a href="{% url 'calendar_event_update' event.id %}"><button class="btn btn-warning">Update</button></a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
 
     </div>
 
