@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DeleteView, CreateView, DetailView, UpdateView
 from django.views.generic.edit import FormView
-from .models import Student, Forum, Message, Grade, Event, Works, Subject
+from .models import *
 from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, EventForm
 from datetime import datetime
 import calendar
@@ -326,3 +326,14 @@ class StudentGradesView(TemplateView):
         context['grades'] = Grade.objects.filter(student=student_id).order_by('-date')
         context['subject'] = Subject.objects.get(subject_name='Python')
         return context
+
+class VoteView(ListView):
+    model = Vote
+    template_name = 'vote.html'
+    context_object_name = 'votes'
+    
+
+class DetailsVoteView(DetailView):
+    model = Vote
+    template_name = 'details/details_vote.html'
+    context_object_name = 'vote'
