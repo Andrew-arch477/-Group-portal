@@ -124,3 +124,7 @@ class Advertisement(models.Model):
 
     def str(self):
         return self.title
+
+class Vote(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(null=False,blank=False)
