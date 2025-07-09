@@ -20,11 +20,17 @@ urlpatterns = [
     path('details_portfolio/<pk>', DetailsPortfolioView.as_view(), name='details_portfolio'),
     
     path('gradebook/', GradebookHomeView.as_view(), name='gradebook'),
-    path('add/', AddGradeView.as_view(), name='add_grade'),
-    path('edit/<int:pk>/', EditGradeView.as_view(), name='edit_grade'),
-    path('delete/<int:pk>/', DeleteGradeView.as_view(), name='delete_grade'),
-    path('student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
+    path('gradebook/add/', AddGradeView.as_view(), name='add_grade'),
+    path('gradebook/edit/<int:pk>/', EditGradeView.as_view(), name='edit_grade'),
+    path('gradebook/delete/<int:pk>/', DeleteGradeView.as_view(), name='delete_grade'),
+    path('gradebook/student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
     
     path('vote/', VoteView.as_view(), name='vote'),
     path('details_vote/<pk>', DetailsVoteView.as_view(), name='details_vote'),
+
+    path('ads/', AdListView.as_view(), name='ad_list'),
+    path('ads/<int:pk>/', AdDetailView.as_view(), name='ad_detail'),
+    path('ads/create/', AdCreateView.as_view(), name='ad_create'),
+    path('ads/<int:pk>/update/', AdUpdateView.as_view(), name='ad_update'),
+    path('ads/<int:pk>/delete/', AdDeleteView.as_view(), name='ad_delete'),
 ]

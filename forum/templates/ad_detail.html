@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ ad.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Дошка оголошень</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4>{{ ad.title }}</h4>
+                            <span class="badge bg-primary">{{ ad.category.name }}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ ad.content }}</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small>Автор: {{ ad.author.username }}</small><br>
+                                <small>Опубліковано: {{ ad.created_at|date:"d.m.Y H:i" }}</small>
+                            </div>
+                            <div>
+                                {% if user.profile.role in 'admin' %}
+                                    <a href="/ads/{{ ad.id }}/update/" class="btn btn-sm btn-outline-secondary">Редагувати</a>
+                                    <a href="/ads/{{ ad.id }}/delete/" class="btn btn-sm btn-outline-danger">Видалити</a>
+                                {% endif %}
+                                <a href="/ads/" class="btn btn-sm btn-outline-primary">Назад до списку</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
