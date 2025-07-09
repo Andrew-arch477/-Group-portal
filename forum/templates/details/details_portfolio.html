@@ -8,6 +8,41 @@
     <title>Details of Portfolio</title>
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">Group Portal</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'forums' %}">Forum</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'calendar_event' %}">Calender</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'portfolio' %}">Portfolio</a>
+          </li>
+        </ul>
+          <div class="d-flex">
+          {% if user.is_authenticated %}
+              <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Вийти з аккаунту</button>
+            </form>
+          {% else %}
+              <a href="{% url 'login' %}" class="btn btn-outline-primary ms-2">Log in</a>
+              <a href="{% url 'register' %}" class="btn btn-outline-success ms-2">Register</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</nav>
     <h2>
         <a href="/portfolio" class="btn btn-primary">Назад</a>
     </h2>
