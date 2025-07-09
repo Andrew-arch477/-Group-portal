@@ -342,3 +342,48 @@ class DetailsVoteView(DetailView):
         context = super().get_context_data(**kwargs)
         context['variants'] = VariantOfVote.objects.filter(vote_id = self.kwargs['pk'])
         return context
+    
+
+class AdListView(ListView):
+    model = Advertisement
+    template_name = 'ad_list.html'
+    context_object_name = 'ads'
+    paginate_by = 6
+    
+    def get_queryset(self):
+        return Advertisement.objects.filter(is_active=True).order_by('-created_at')
+
+class AdDetailView(DetailView):
+    model = Advertisement
+    template_name = 'ad_detail.html'
+    context_object_name = 'ad'
+    
+    def get_queryset(self):
+        return Advertisement.objects.filter(is_active=True)
+
+class AdCreateView(LoginRequiredMixin, CreateView):
+    model = Advertisement
+    template_name = 'ad_form.html'
+    fields = ['title', 'content', 'category']
+    success_url = reverse_lazy('ad_list')
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class AdUpdateView(LoginRequiredMixin, UpdateView):
+    model = Advertisement
+    template_name = 'ad_form.html'
+    fields = ['title', 'content', 'category']
+    success_url = reverse_lazy('ad_list')
+    
+    def get_queryset(self):
+        return Advertisement.objects.filter(author=self.request.user)
+
+class AdDeleteView(LoginRequiredMixin, DeleteView):
+    model = Advertisement
+    template_name = 'ad_confirm_delete.html'
+    success_url = reverse_lazy('ad_list')
+    
+    def get_queryset(self):
+        return Advertisement.objects.filter(author=self.request.user)
