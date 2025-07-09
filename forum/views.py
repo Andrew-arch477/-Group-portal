@@ -263,10 +263,10 @@ class PortfolioView(ListView):
 class DetailsPortfolioView(DetailView):
     template_name = "details/details_portfolio.html"
     model = Student
+    context_object_name = 'students'
 
     def get_context_data(self, **kwargs):
-        context = super(DetailsPortfolioView, self).get_context_data(**kwargs)
-        context['students'] = Student.objects.get(pk=self.kwargs['pk'])
+        context = super().get_context_data(**kwargs)
         context['works'] = Works.objects.filter(student_id=Student.objects.get(pk=self.kwargs['pk']))
         return context
 
@@ -337,3 +337,8 @@ class DetailsVoteView(DetailView):
     model = Vote
     template_name = 'details/details_vote.html'
     context_object_name = 'vote'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['variants'] = VariantOfVote.objects.filter(vote_id = self.kwargs['pk'])
+        return context
