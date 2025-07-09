@@ -12,6 +12,13 @@
     Name: {{ vote.name }}<br>
     Description: {{ vote.description }}
     </h1>
+    <div class="row">
+      {% for variant in variants %}
+        <div class="col-6 d-flex justify-content-center align-items-center">
+          <h3>{{ variant.name }}</h3>
+        </div>
+      {% endfor %}
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>
