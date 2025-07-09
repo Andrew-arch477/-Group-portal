@@ -11,8 +11,6 @@ urlpatterns = [
     path('forums/', Forums.as_view(), name='forums'),
     path('detailed_forum/<int:forum_id>/', DetailedForum.as_view(), name='detailed_forum'),
 
-    path('home/', HomeView.as_view(), name='home'),
-
     path('eventcalendar/', Calendar.as_view(), name='calendar_event'),
     path('eventcreate/', Event_create.as_view(), name='calendar_event_create'),
     path('eventdelete/<int:pk>/', Event_delete.as_view(), name='calendar_event_delete'),
