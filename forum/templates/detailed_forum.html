@@ -17,17 +17,26 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav ms-auto">
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'forums' %}">Forums</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'forums' %}">Forum</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'calendar_event' %}">Calender</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'portfolio' %}">Portfolio</a>
               </li>
             </ul>
               <div class="d-flex">
               {% if user.is_authenticated %}
-                  <a href="" class="btn btn-outline-danger ms-2">Log out</a>
+                  <form method="post" action="{% url 'logout' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger">Вийти з аккаунту</button>
+                </form>
               {% else %}
                   <a href="{% url 'login' %}" class="btn btn-outline-primary ms-2">Log in</a>
                   <a href="{% url 'register' %}" class="btn btn-outline-success ms-2">Register</a>
