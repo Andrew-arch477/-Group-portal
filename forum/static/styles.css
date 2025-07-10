@@ -525,6 +525,28 @@
     background-color: #053c5c;
 }
 
+.btn_back_portfolio {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #0d4d72;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 105px;
+    text-decoration: none;
+    margin-bottom: 15px;
+    margin-top: 45px;
+    display: block;
+    margin-left: 145px;
+    text-align: center;
+
+}
+
+.btn_back_portfolio:hover {
+    background-color: #053c5c;
+}
+
 .selected_forum {
     background-color: #e7e7e7; 
     border-left: 4px solid #0d4d72;
@@ -813,19 +835,22 @@ a.text-decoration-none {
 }
 
 .github-link {
-    color: grey !important;
+    color: #2c2b2b !important;
+    font-size: inherit !important;
+    font-weight: inheritZ;
 }
 .github-link:hover {
-    color: grey !important;
+    color: rgb(36, 36, 36) !important;
     text-decoration: none !important;
-    background-color: rgba(13, 77, 114, 0.14);
 }
 
 .favorite-project {
-    color: gold !important;
+    color: #f3ba00 !important;
+    font-size: inherit;
+    font-weight: inherit;
 }
 .favorite-project:hover {
-    background-color: rgba(174, 176, 15, 0.14);
+    color: #664e00;
 }
 
 .info-icon {
@@ -833,6 +858,7 @@ a.text-decoration-none {
     height: 48px;
     margin-right: 10px;
     flex-shrink: 0;
+    margin-right: 27px;   
 }
 
 .info-link {
@@ -840,13 +866,32 @@ a.text-decoration-none {
     text-decoration: none;    
     cursor: pointer;
     transition: opacity .2s;
+    font-size: inherit;
+    font-weight: inherit;
 }
 .info-link:hover {
     opacity: 0.8;
 }
+
+.info-item {
+    color: #2c2b2b;  
+    font-size: inherit;
+    font-weight: inherit;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
 .username-item {
-    color: #433e3e;  
-    font-size: 2.3rem; 
+    color: #2c2b2b;  
+}
+
+.center {
+    max-width: 600px;  
+    margin: 0 auto; 
+    padding: 20px;
+    font-size: 35px; 
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 800;
 }
 
 body {
