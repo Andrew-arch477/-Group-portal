@@ -45,6 +45,7 @@
     </nav>
 
     <h1>Event Calendar</h1>
+    
     <div class="horizontal">
         <form method="post" class="center_div_calender">
             {% csrf_token %}
@@ -55,23 +56,46 @@
         <div class="calendar">
             {{ calendar_html|safe }}
         </div>
-
         {% if role == 'admin' or role == 'moderator' %}
             <a href="{% url 'calendar_event_create'%}"><button class="btn btn-success">Create</button></a>
         {% endif %}
 
-        <ul>
-            {% for event in events %}
-                <li>{{ event.name }} - {{ event.date }} - {{ event.description }} - {{ event.time }} - {{ event.month }} - {{ event.year }}
-                    {% if role == 'admin' or role == 'moderator' %}
-                        <a href="{% url 'calendar_event_delete' event.id %}"><button class="btn btn-danger">Delete</button></a>
-                        <a href="{% url 'calendar_event_update' event.id %}"><button class="btn btn-warning">Update</button></a>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+        
+
+        
 
     </div>
+    <table class="table table-bordered table-striped" style="max-width: 90%; margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    
+                    {% if role == 'admin' or role == 'moderator' %}
+                        <th style="min-width: 150px;">Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.description }}</td>
+                        <td>{{ event.date }}.{{ event.month }}.{{ event.year }}</td>
+                        <td>{{ event.time }}</td>
+                        
+                        {% if role == 'admin' or role == 'moderator' %}
+                            <td style="min-width: 150px;">
+                                <a href="{% url 'calendar_event_update' event.id %}" class="btn btn-warning btn-sm">Update</a>
+                                <a href="{% url 'calendar_event_delete' event.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+    </table>
 
 </body>
 </html>
