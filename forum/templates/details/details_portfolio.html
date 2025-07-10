@@ -43,30 +43,28 @@
       </div>
     </div>
 </nav>
-    <h2>
-        <a href="/portfolio" class="btn btn-primary">Назад</a>
-    </h2>
-    <h1>
+    <a href="{% url 'portfolio' %}" class="btn_back_portfolio">Назад</a>
+    <div class="center">
         <div class="info-item">
             <img src="/static/icons/name.png" alt="Name icon" class="info-icon">
-            Iмя: {{ students.first_name }} {{ students.middle_name }} {{ students.last_name }}
+            Iм'я: {{ students.first_name }} {{ students.middle_name }} {{ students.last_name }}
         </div>
     
         <div class="info-item username-item">
-            <img src="/static/icons/user.png" alt="User icon" class="info-icon">
+            <img src="/static/icons/user_01.png" alt="User icon" class="info-icon">
             Юзернейм: {{ students.username }}
         </div>
     
         <div class="info-item">
-            <img src="/static/icons/best.png" alt="Best project icon" class="info-icon">
+            <img src="/static/icons/premium.png" alt="Best project icon" class="info-icon">
             <a href="{{ students.favorite_project }}" target="_blank" class="info-link favorite-project">Улюбленний проєкт</a>
         </div>
 
         <div class="info-item">
-            <img src="/static/icons/github.png" alt="GitHub icon" class="info-icon">
+            <img src="/static/icons/github_01.png" alt="GitHub icon" class="info-icon">
             <a href="{{ students.github }}" target="_blank" class="info-link github-link">Github</a>
         </div>
-    </h1>
+      </div>
     <div class="container my-5">
         <div class="row gx-4 gy-4">
           {% for work in works %}

@@ -201,7 +201,7 @@ class DetailedForum(FormView):
     def get(self, request, *args, **kwargs):
         forums = Forum.objects.all().order_by('-created_date')
         messages = self.forum.message_set.all().select_related('reply').order_by('created_date')
-        context = self.get_context_data(forum=self.forum, messages=messages, forums=forums)
+        context = self.get_context_data(forum=self.forum, messages=messages, forums=forums, forum_id=self.forum.id)
         context["css_file"] = 'styles.css'
         return render(request, 'detailed_forum.html', context)
 
