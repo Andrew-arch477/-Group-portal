@@ -525,6 +525,13 @@
     background-color: #053c5c;
 }
 
+.selected_forum {
+    background-color: #e7e7e7; 
+    border-left: 4px solid #0d4d72;
+    padding: 15px;
+    border-radius: 5px;
+}
+
 nav {
     padding-bottom: 1px; 
     padding-top: 0%;
