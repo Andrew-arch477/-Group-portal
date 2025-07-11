@@ -27,6 +27,8 @@ urlpatterns = [
     
     path('vote/', VoteView.as_view(), name='vote'),
     path('details_vote/<pk>', DetailsVoteView.as_view(), name='details_vote'),
+    
+    path('vote/voice/<pk>', VoteVoiceView.as_view()),
 
     path('ads/', AdListView.as_view(), name='ad_list'),
     path('ads/<int:pk>/', AdDetailView.as_view(), name='ad_detail'),

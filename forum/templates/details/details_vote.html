@@ -15,7 +15,7 @@
     <div class="row">
       {% for variant in variants %}
         <div class="col-6 d-flex justify-content-center align-items-center">
-          <h3>{{ variant.name }}</h3>
+          <a href="/vote/voice/{{ variant.id }}">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
         </div>
       {% endfor %}
     </div>
