@@ -9,6 +9,7 @@ from .models import *
 from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, EventForm
 from datetime import datetime
 import calendar
+from django.db.models import Count
 
 class HomePage(TemplateView):
     template_name = 'home.html'
@@ -341,9 +342,15 @@ class DetailsVoteView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['variants'] = VariantOfVote.objects.filter(vote_id = self.kwargs['pk'])
+        context['variants'] = VariantOfVote.objects.filter(vote_id = self.kwargs['pk']).annotate(voices_count=Count('voice'))
         return context
-    
+
+class VoteVoiceView(View):
+    model = Vote
+    def get(self, request, *args, **kwargs):
+        variant = VariantOfVote.objects.get(id = self.kwargs['pk'])
+        Voice.objects.create(variant_id = variant.id, user = request.user)
+        return redirect(f'/details_vote/{variant.vote_id}')
 
 class AdListView(ListView):
     model = Advertisement
