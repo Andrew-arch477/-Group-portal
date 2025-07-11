@@ -201,7 +201,8 @@ class DetailedForum(FormView):
     def get(self, request, *args, **kwargs):
         forums = Forum.objects.all().order_by('-created_date')
         messages = self.forum.message_set.all().select_related('reply').order_by('created_date')
-        context = self.get_context_data(forum=self.forum, messages=messages, forums=forums, forum_id=self.forum.id)
+        user_role = self.request.user.profile.role
+        context = self.get_context_data(forum=self.forum, messages=messages, forums=forums, forum_id=self.forum.id, role=user_role)
         context["css_file"] = 'styles.css'
         return render(request, 'detailed_forum.html', context)
 
@@ -227,7 +228,7 @@ class DetailedForum(FormView):
         edit_id = self.request.POST.get("edit_id")
 
         if self.action == "edit" and edit_id:
-            message = Message.objects.get(id=edit_id, user=self.request.user)
+            message = Message.objects.get(id=edit_id)
             message.text = text
             message.save()
 
