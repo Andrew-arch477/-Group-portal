@@ -22,8 +22,7 @@ class Calendar(FormView):
         context = super().get_context_data(**kwargs)
         now = datetime.now()
 
-        # Load all events or filtered ones passed from form_valid
-        context['events'] = kwargs.get('events', Event.objects.all())
+        # context['events'] = kwargs.get('events', Event.objects.all())
 
         if 'calendar_html' not in context:
             cal = calendar.HTMLCalendar(firstweekday=0)

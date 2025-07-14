@@ -128,6 +128,8 @@ class Advertisement(models.Model):
 class Vote(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=False,blank=False)
+    create_date = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateTimeField()
 
 class VariantOfVote(models.Model):
     vote = models.ForeignKey(Vote,on_delete=models.CASCADE)
