@@ -656,6 +656,13 @@ nav {
     padding: 30px;
 }
 
+.center_div_event {
+    max-width: 600px;         
+    margin-bottom: 10px; 
+    padding: 30px;
+    margin: 50px auto !important;
+}
+
 .center_div_calender {
     max-width: 600px;         
     margin: 35px;       

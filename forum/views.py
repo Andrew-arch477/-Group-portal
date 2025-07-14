@@ -345,10 +345,14 @@ class DetailsVoteView(DetailView):
         return context
 
 class VoteVoiceView(View):
-    model = Vote
     def get(self, request, *args, **kwargs):
         variant = VariantOfVote.objects.get(id = self.kwargs['pk'])
-        Voice.objects.create(variant_id = variant.id, user = request.user)
+        voices_user = Voice.objects.filter(variant__vote = variant.vote, user = request.user)
+        if voices_user.filter(variant_id = variant).exists():
+            voices_user.filter(variant_id = variant).delete()
+        else:
+            voices_user.delete()
+            Voice.objects.create(variant_id = variant.id, user = request.user)
         return redirect(f'/details_vote/{variant.vote_id}')
 
 class AdListView(ListView):
