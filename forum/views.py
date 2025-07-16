@@ -24,8 +24,7 @@ class Calendar(FormView):
         context = super().get_context_data(**kwargs)
         now = datetime.now()
 
-        # Load all events or filtered ones passed from form_valid
-        context['events'] = kwargs.get('events', Event.objects.all())
+        # context['events'] = kwargs.get('events', Event.objects.all())
 
         if 'calendar_html' not in context:
             cal = calendar.HTMLCalendar(firstweekday=0)
@@ -204,8 +203,7 @@ class DetailedForum(FormView):
     def get(self, request, *args, **kwargs):
         forums = Forum.objects.all().order_by('-created_date')
         messages = self.forum.message_set.all().select_related('reply').order_by('created_date')
-        user_role = self.request.user.profile.role
-        context = self.get_context_data(forum=self.forum, messages=messages, forums=forums, forum_id=self.forum.id, role=user_role)
+        context = self.get_context_data(forum=self.forum, messages=messages, forums=forums, forum_id=self.forum.id)
         context["css_file"] = 'styles.css'
         return render(request, 'detailed_forum.html', context)
 
@@ -231,7 +229,7 @@ class DetailedForum(FormView):
         edit_id = self.request.POST.get("edit_id")
 
         if self.action == "edit" and edit_id:
-            message = Message.objects.get(id=edit_id)
+            message = Message.objects.get(id=edit_id, user=self.request.user)
             message.text = text
             message.save()
 
@@ -397,10 +395,14 @@ class DetailsVoteView(DetailView):
         return context
 
 class VoteVoiceView(View):
-    model = Vote
     def get(self, request, *args, **kwargs):
         variant = VariantOfVote.objects.get(id = self.kwargs['pk'])
-        Voice.objects.create(variant_id = variant.id, user = request.user)
+        voices_user = Voice.objects.filter(variant__vote = variant.vote, user = request.user)
+        if voices_user.filter(variant_id = variant).exists():
+            voices_user.filter(variant_id = variant).delete()
+        else:
+            voices_user.delete()
+            Voice.objects.create(variant_id = variant.id, user = request.user)
         return redirect(f'/details_vote/{variant.vote_id}')
 
 class AdListView(ListView):
