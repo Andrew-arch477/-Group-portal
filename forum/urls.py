@@ -24,6 +24,7 @@ urlpatterns = [
     path('gradebook/edit/<int:pk>/', EditGradeView.as_view(), name='edit_grade'),
     path('gradebook/delete/<int:pk>/', DeleteGradeView.as_view(), name='delete_grade'),
     path('gradebook/student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
+    path('check-repositories/', check_repositories, name='check_repositories'),
     
     path('vote/', VoteView.as_view(), name='vote'),
     path('details_vote/<pk>', DetailsVoteView.as_view(), name='details_vote'),

@@ -10,6 +10,8 @@ from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, E
 from datetime import datetime
 import calendar
 from django.db.models import Count
+from django.http import JsonResponse
+import requests
 
 class HomePage(TemplateView):
     template_name = 'home.html'
@@ -293,14 +295,63 @@ class AddGradeView(FormView):
     form_class = GradeForm
     success_url = '/gradebook'
 
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['subject'] = Subject.objects.get(subject_name='Python')
+
+        if self.request.method == 'POST':
+            student_id = self.request.POST.get('student')
+            if student_id:
+                try:
+                    student = Student.objects.get(id=student_id)
+                    context['selected_student'] = student
+                    context['repositories'] = self.get_github_repositories(student.github)
+                except Student.DoesNotExist:
+                    pass
         return context
+
+    def form_valid(self, form):
+        student = form.cleaned_data['student']
+        repositories = self.get_github_repositories(student.github)
+
+        if not repositories:
+            form.add_error(None, "Учень не має жодного публічного репозиторію на GitHub")
+            return self.form_invalid(form)
+            
+        form.save()
+        return super().form_valid(form)
+
+    def get_github_repositories(self, github_url):
+        try:
+            username = github_url.split('/')[-1]
+            api_url = f"https://api.github.com/users/{username}/repos"
+            response = requests.get(api_url)
+            if response.status_code == 200:
+                return response.json()
+            return None
+        except Exception:
+            return None
+
+def check_repositories(request):
+    github_url = request.GET.get('url')
+    if not github_url:
+        return JsonResponse({'error': 'GitHub URL is required'}, status=400)
+    
+    try:
+        username = github_url.split('/')[-1]
+        api_url = f"https://api.github.com/users/{username}/repos"
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            repos = response.json()
+            return JsonResponse({
+                'repositories': [{
+                    'name': repo['name'],
+                    'html_url': repo['html_url']
+                } for repo in repos]
+            })
+        return JsonResponse({'error': 'Failed to fetch repositories'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 class DeleteGradeView(DeleteView):
     model = Grade
