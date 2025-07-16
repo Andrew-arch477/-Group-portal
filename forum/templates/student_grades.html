@@ -6,35 +6,10 @@
     <title>{{ student }} Grades</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        .project-link {
-            display: inline-block;
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: #0366d6;
-            text-decoration: none;
-        }
-        .project-link:hover {
-            text-decoration: underline;
-        }
-        .repo-icon {
-            margin-right: 5px;
-        }
-        .no-project {
-            color: #6c757d;
-            font-style: italic;
-        }
-        .grade-badge {
-            min-width: 36px;
-            display: inline-block;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'home' %}">Group Portal</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,14 +45,14 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container my-4">
         <div class="card mb-4">
             <div class="card-body">
-                <h1 class="h4">{{ student.first_name }} {{ student.last_name }}</h1>
-                <p><strong>Email:</strong> {{ student.email }}</p>
-                <p>
+                <h1 class="h4 card-title">{{ student.first_name }} {{ student.last_name }}</h1>
+                <p class="text-white"><strong>Email:</strong> {{ student.email }}</p>
+                <p class="text-white">
                     <strong>GitHub:</strong> 
-                    <a href="{{ student.github }}" target="_blank" class="project-link">
+                    <a href="{{ student.github }}" target="_blank" class="project-link text-white">
                         <i class="bi bi-github"></i> {{ student.github }}
                     </a>
                 </p>
@@ -86,7 +61,7 @@
 
         <div class="card">
             <div class="card-body">
-                <h2 class="h5">Python Grades</h2>
+                <h2 class="h5 card-title">Python Grades</h2>
                 
                 {% if user.profile.role in 'admin moderator' %}
                     <a href="{% url 'add_grade' %}?student={{ student.id }}" class="btn btn-primary mb-3">
@@ -96,7 +71,7 @@
                 
                 <div class="table-responsive">
                     <table class="table table-hover">
-                        <thead>
+                        <thead class="table-dark">
                             <tr>
                                 <th>Grade</th>
                                 <th>Teacher</th>
@@ -112,41 +87,29 @@
                             {% for grade in grades %}
                             <tr>
                                 <td>
-                                    <span class="badge grade-badge bg-{% if grade.grade >= 10 %}success{% elif grade.grade >= 7 %}warning{% else %}danger{% endif %}">
+                                    <span class="badge bg-{% if grade.grade >= 10 %}success{% elif grade.grade >= 7 %}warning{% else %}danger{% endif %}">
                                         {{ grade.grade }}
                                     </span>
                                 </td>
                                 <td>{{ grade.teacher.first_name }} {{ grade.teacher.last_name }}</td>
                                 <td>{{ grade.date|date:"Y-m-d" }}</td>
                                 <td>
-                                    {% if 'github.com' in grade.notes|lower %}
-                                        {% with repo_url=grade.notes|slice:":200" %}
-                                            {% if 'http' in repo_url %}
-                                                <a href="{{ repo_url }}" target="_blank" class="project-link">
-                                                    <i class="bi bi-github repo-icon"></i>
-                                                    {{ repo_url|cut:"https://github.com/"|truncatechars:30 }}
-                                                </a>
-                                            {% else %}
-                                                <span class="no-project">Invalid link</span>
-                                            {% endif %}
-                                        {% endwith %}
-                                    {% elif grade.repository %}
+                                    {% if grade.repository %}
                                         <a href="{{ grade.repository }}" target="_blank" class="project-link">
-                                            <i class="bi bi-github repo-icon"></i>
-                                            {{ grade.repository|cut:"https://github.com/"|truncatechars:30 }}
+                                            <i class="bi bi-github"></i> {{ grade.repository|cut:"https://github.com/"|truncatechars:20 }}
                                         </a>
                                     {% else %}
-                                        <span class="no-project">No project</span>
+                                        <span class="text-muted">-</span>
                                     {% endif %}
                                 </td>
-                                <td>{{ grade.notes }}</td>
+                                <td>{{ grade.notes|truncatechars:30 }}</td>
                                 {% if user.profile.role in 'admin moderator' %}
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                            <a href="{% url 'edit_grade' grade.pk %}" class="btn btn-outline-warning" title="Edit">
+                                            <a href="{% url 'edit_grade' grade.pk %}" class="btn btn-outline-warning">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a href="{% url 'delete_grade' grade.pk %}" class="btn btn-outline-danger" title="Delete">
+                                            <a href="{% url 'delete_grade' grade.pk %}" class="btn btn-outline-danger">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
