@@ -12,6 +12,7 @@ import calendar
 from django.db.models import Count
 from django.http import JsonResponse
 import requests
+from .mixins import *
 
 class HomePage(TemplateView):
     template_name = 'home.html'
@@ -378,13 +379,13 @@ class StudentGradesView(TemplateView):
         context['subject'] = Subject.objects.get(subject_name='Python')
         return context
 
-class VoteView(ListView):
+class VoteView(TodayMixin, ListView):
     model = Vote
     template_name = 'vote.html'
     context_object_name = 'votes'
     
 
-class DetailsVoteView(DetailView):
+class DetailsVoteView(TodayMixin, DetailView):
     model = Vote
     template_name = 'details/details_vote.html'
     context_object_name = 'vote'
@@ -393,6 +394,7 @@ class DetailsVoteView(DetailView):
         context = super().get_context_data(**kwargs)
         context['variants'] = VariantOfVote.objects.filter(vote_id = self.kwargs['pk']).annotate(voices_count=Count('voice'))
         return context
+
 
 class VoteVoiceView(View):
     def get(self, request, *args, **kwargs):
