@@ -5,94 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python Group Journal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="{% url 'home' %}">Group Portal</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{% url 'forums' %}">Forum</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'calendar_event' %}">Calender</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'portfolio' %}">Portfolio</a>
-              </li>
-            </ul>
-              <div class="d-flex">
-              {% if user.is_authenticated %}
-                  <form method="post" action="{% url 'logout' %}">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-danger">Вийти з аккаунту</button>
-                </form>
-              {% else %}
-                  <a href="{% url 'login' %}" class="btn btn-outline-primary ms-2">Log in</a>
-                  <a href="{% url 'register' %}" class="btn btn-outline-success ms-2">Register</a>
-              {% endif %}
+            <a class="navbar-brand" href="{% url 'home' %}">Group Portal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'forums' %}">Forum</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'calendar_event' %}">Calendar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'portfolio' %}">Portfolio</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Log Out</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary ms-2">Log in</a>
+                        <a href="{% url 'register' %}" class="btn btn-outline-success ms-2">Register</a>
+                    {% endif %}
+                </div>
             </div>
-          </div>
         </div>
     </nav>
-    <div class="container">
-        <h1>Python Group Journal</h1>
+
+    <div class="container my-4">
+        <h1 class="text-center mb-4">Python Group Journal</h1>
 
         {% if user.profile.role in 'admin moderator' %}
-            <a href="{% url 'add_grade' %}" class="btn btn-primary mb-4">Add Grade</a>
+            <a href="{% url 'add_grade' %}" class="btn btn-primary mb-4">
+                <i class="bi bi-plus-lg"></i> Add Grade
+            </a>
         {% endif %}
-        
-        <h2>Students</h2>
-        <div class="list-group">
-            {% for student in students %}
-                <a href="{% url 'student_grades' student.id %}" class="list-group-item">
-                    {{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}
-                </a>
-            {% endfor %}
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="h5 card-title">Students</h2>
+                <div class="list-group">
+                    {% for student in students %}
+                        <a href="{% url 'student_grades' student.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            {{ student.first_name }} {{ student.last_name }}
+                            <span class="badge bg-primary rounded-pill">{{ student.grade_set.count }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        
-        <h2>Recent Grades</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Student</th>
-                    <th>Grade</th>
-                    <th>Teacher</th>
-                    <th>Date</th>
-                    <th>Notes</th>
-                    {% if user.profile.role in 'admin moderator' %}
-                        <th>Actions</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for grade in grades %}
-                <tr>
-                    <td>{{ grade.student.first_name }} {{ grade.student.middle_name }}</td>
-                    <td>{{ grade.grade }}</td>
-                    <td>{{ grade.teacher.first_name }} {{ grade.teacher.middle_name }}</td>
-                    <td>{{ grade.date }}</td>
-                    <td>{{ grade.notes|default:"" }}</td>
-                    {% if user.profile.role in 'admin moderator' %}
-                        <td>
-                            <a href="{% url 'edit_grade' grade.pk %}" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="{% url 'delete_grade' grade.pk %}" class="btn btn-sm btn-danger">Delete</a>
-                        </td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+        <div class="card">
+            <div class="card-body">
+                <h2 class="h5 card-title">Recent Grades</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Student</th>
+                                <th>Grade</th>
+                                <th>Teacher</th>
+                                <th>Date</th>
+                                <th>Project</th>
+                                <th>Notes</th>
+                                {% if user.profile.role in 'admin moderator' %}
+                                    <th>Actions</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for grade in grades %}
+                            <tr>
+                                <td>{{ grade.student.first_name }} {{ grade.student.last_name }}</td>
+                                <td>
+                                    <span class="badge bg-{% if grade.grade >= 10 %}success{% elif grade.grade >= 7 %}warning{% else %}danger{% endif %}">
+                                        {{ grade.grade }}
+                                    </span>
+                                </td>
+                                <td>{{ grade.teacher.first_name }} {{ grade.teacher.last_name }}</td>
+                                <td>{{ grade.date|date:"Y-m-d" }}</td>
+                                <td>
+                                    {% if grade.repository %}
+                                        <a href="{{ grade.repository }}" target="_blank" class="project-link">
+                                            <i class="bi bi-github"></i> {{ grade.repository|cut:"https://github.com/"|truncatechars:20 }}
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ grade.notes|truncatechars:30 }}</td>
+                                {% if user.profile.role in 'admin moderator' %}
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'edit_grade' grade.pk %}" class="btn btn-outline-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="{% url 'delete_grade' grade.pk %}" class="btn btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">No grades found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

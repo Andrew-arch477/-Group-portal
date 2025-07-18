@@ -10,6 +10,9 @@ from .forms import LoginForm, MessageForm, CalendarForm, GradeForm, ForumForm, E
 from datetime import datetime
 import calendar
 from django.db.models import Count
+from django.http import JsonResponse
+import requests
+from .mixins import *
 
 class HomePage(TemplateView):
     template_name = 'home.html'
@@ -22,8 +25,7 @@ class Calendar(FormView):
         context = super().get_context_data(**kwargs)
         now = datetime.now()
 
-        # Load all events or filtered ones passed from form_valid
-        context['events'] = kwargs.get('events', Event.objects.all())
+        # context['events'] = kwargs.get('events', Event.objects.all())
 
         if 'calendar_html' not in context:
             cal = calendar.HTMLCalendar(firstweekday=0)
@@ -202,8 +204,7 @@ class DetailedForum(FormView):
     def get(self, request, *args, **kwargs):
         forums = Forum.objects.all().order_by('-created_date')
         messages = self.forum.message_set.all().select_related('reply').order_by('created_date')
-        user_role = self.request.user.profile.role
-        context = self.get_context_data(forum=self.forum, messages=messages, forums=forums, forum_id=self.forum.id, role=user_role)
+        context = self.get_context_data(forum=self.forum, messages=messages, forums=forums, forum_id=self.forum.id)
         context["css_file"] = 'styles.css'
         return render(request, 'detailed_forum.html', context)
 
@@ -229,7 +230,7 @@ class DetailedForum(FormView):
         edit_id = self.request.POST.get("edit_id")
 
         if self.action == "edit" and edit_id:
-            message = Message.objects.get(id=edit_id)
+            message = Message.objects.get(id=edit_id, user=self.request.user)
             message.text = text
             message.save()
 
@@ -293,14 +294,63 @@ class AddGradeView(FormView):
     form_class = GradeForm
     success_url = '/gradebook'
 
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['subject'] = Subject.objects.get(subject_name='Python')
+
+        if self.request.method == 'POST':
+            student_id = self.request.POST.get('student')
+            if student_id:
+                try:
+                    student = Student.objects.get(id=student_id)
+                    context['selected_student'] = student
+                    context['repositories'] = self.get_github_repositories(student.github)
+                except Student.DoesNotExist:
+                    pass
         return context
+
+    def form_valid(self, form):
+        student = form.cleaned_data['student']
+        repositories = self.get_github_repositories(student.github)
+
+        if not repositories:
+            form.add_error(None, "Учень не має жодного публічного репозиторію на GitHub")
+            return self.form_invalid(form)
+            
+        form.save()
+        return super().form_valid(form)
+
+    def get_github_repositories(self, github_url):
+        try:
+            username = github_url.split('/')[-1]
+            api_url = f"https://api.github.com/users/{username}/repos"
+            response = requests.get(api_url)
+            if response.status_code == 200:
+                return response.json()
+            return None
+        except Exception:
+            return None
+
+def check_repositories(request):
+    github_url = request.GET.get('url')
+    if not github_url:
+        return JsonResponse({'error': 'GitHub URL is required'}, status=400)
+    
+    try:
+        username = github_url.split('/')[-1]
+        api_url = f"https://api.github.com/users/{username}/repos"
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            repos = response.json()
+            return JsonResponse({
+                'repositories': [{
+                    'name': repo['name'],
+                    'html_url': repo['html_url']
+                } for repo in repos]
+            })
+        return JsonResponse({'error': 'Failed to fetch repositories'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 class DeleteGradeView(DeleteView):
     model = Grade
@@ -329,13 +379,13 @@ class StudentGradesView(TemplateView):
         context['subject'] = Subject.objects.get(subject_name='Python')
         return context
 
-class VoteView(ListView):
+class VoteView(TodayMixin, ListView):
     model = Vote
     template_name = 'vote.html'
     context_object_name = 'votes'
     
 
-class DetailsVoteView(DetailView):
+class DetailsVoteView(TodayMixin, DetailView):
     model = Vote
     template_name = 'details/details_vote.html'
     context_object_name = 'vote'
@@ -345,11 +395,16 @@ class DetailsVoteView(DetailView):
         context['variants'] = VariantOfVote.objects.filter(vote_id = self.kwargs['pk']).annotate(voices_count=Count('voice'))
         return context
 
+
 class VoteVoiceView(View):
-    model = Vote
     def get(self, request, *args, **kwargs):
         variant = VariantOfVote.objects.get(id = self.kwargs['pk'])
-        Voice.objects.create(variant_id = variant.id, user = request.user)
+        voices_user = Voice.objects.filter(variant__vote = variant.vote, user = request.user)
+        if voices_user.filter(variant_id = variant).exists():
+            voices_user.filter(variant_id = variant).delete()
+        else:
+            voices_user.delete()
+            Voice.objects.create(variant_id = variant.id, user = request.user)
         return redirect(f'/details_vote/{variant.vote_id}')
 
 class AdListView(ListView):

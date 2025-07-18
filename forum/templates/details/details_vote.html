@@ -8,14 +8,34 @@
     <title>Details of Vote</title>
 </head>
 <body>
+    {% if vote.deadline < today %}
+      <h1 style="color: #ff0000;">
+        This voting is over!
+      </h1>
+    {% endif %}
+
+    {% if not user.is_authenticated %}
+      <h1 style="color: #ff0000;">
+        To vote you need to log in to your account!
+      </h1>
+    {% endif %}    
+
     <h1>
     Name: {{ vote.name }}<br>
+    Create Date: {{ vote.create_date }}<br>
+    Deadline: {{ vote.deadline }}<br>
     Description: {{ vote.description }}
     </h1>
     <div class="row">
       {% for variant in variants %}
         <div class="col-6 d-flex justify-content-center align-items-center">
-          <a href="/vote/voice/{{ variant.id }}">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
+          <h3>
+          {% if user.is_authenticated and vote.deadline > today %}
+          <a href="/vote/voice/{{ variant.id }}" class="btn btn-outline-primary">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
+          {% else %}
+          <a href="/vote/voice/{{ variant.id }}" class="btn btn-outline-primary disabled" role="button" aria-disabled="true">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
+          </h3>
+          {% endif %}
         </div>
       {% endfor %}
     </div>
