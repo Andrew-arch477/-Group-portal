@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['group-portal-qtcx.onrender.com', '*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://group-portal-qtcx.onrender.com',
+]
 
 # Application definition
 
