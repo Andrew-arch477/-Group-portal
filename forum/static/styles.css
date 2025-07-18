@@ -1063,3 +1063,148 @@ body {
 .nav_btn:hover {
   background-color: #053c5c;
 }
+
+/* Додайте ці стилі в кінець вашого styles.css */
+
+.ads-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.ad-item .card {
+    background-color: #272727;
+    color: #9dc9ff;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.ad-item .card:hover {
+    background-color: #27466b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ad-item .card-header {
+    background-color: #1f3145;
+    border-bottom: 1px solid #3a4d65;
+}
+
+.ad-item .card-title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 700;
+    color: #e0e6ed;
+}
+
+.ad-item .card-text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    color: #ced6e0;
+    margin-bottom: 1rem;
+}
+
+.ad-item .card-footer {
+    background-color: #1f3145;
+    border-top: 1px solid #3a4d65;
+}
+
+.ad-item .badge {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 0.8rem;
+}
+
+.ad-item .text-muted {
+    color: #6b8ba4 !important;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 0.85rem;
+}
+
+/* Стилі для сторінки деталей оголошення */
+.ad-detail-card {
+    background-color: #272727;
+    color: #9dc9ff;
+    border: none;
+    border-radius: 6px;
+}
+
+.ad-detail-card .card-header {
+    background-color: #1f3145;
+    border-bottom: 1px solid #3a4d65;
+}
+
+.ad-detail-card .card-title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 700;
+    color: #e0e6ed;
+}
+
+.ad-detail-card .card-text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    color: #ced6e0;
+    white-space: pre-line;
+}
+
+.ad-detail-card .card-footer {
+    background-color: #1f3145;
+    border-top: 1px solid #3a4d65;
+}
+
+.ad-detail-card .text-muted {
+    color: #6b8ba4 !important;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 0.85rem;
+}
+
+/* Стилі для форми */
+.form-card {
+    background-color: #272727;
+    color: #9dc9ff;
+    border: none;
+    border-radius: 6px;
+}
+
+.form-card .card-header {
+    background-color: #1f3145;
+    border-bottom: 1px solid #3a4d65;
+}
+
+.form-card .form-label {
+    color: #ced6e0;
+    font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.form-card .form-control,
+.form-card .form-select {
+    background-color: #1f3145;
+    border: 1px solid #3a4d65;
+    color: #e0e6ed;
+}
+
+.form-card .form-control:focus,
+.form-card .form-select:focus {
+    background-color: #27466b;
+    border-color: #4a6b8f;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.25rem rgba(61, 120, 194, 0.25);
+}
+
+/* Стилі для підтвердження видалення */
+.delete-card {
+    background-color: #272727;
+    color: #9dc9ff;
+    border: none;
+    border-radius: 6px;
+}
+
+.delete-card .card-header {
+    background-color: #751609 !important;
+    border-bottom: 1px solid #9a1f0c;
+}
+
+.delete-card p {
+    font-family: 'Hanken Grotesk', sans-serif;
+    color: #ced6e0;
+    margin-bottom: 1.5rem;
+}
