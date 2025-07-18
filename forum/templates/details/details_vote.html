@@ -8,32 +8,67 @@
     <title>Details of Vote</title>
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">Group Portal</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'forums' %}">Forum</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'calendar_event' %}">Calender</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'portfolio' %}">Portfolio</a>
+          </li>
+        </ul>
+          <div class="d-flex">
+          {% if user.is_authenticated %}
+              <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Вийти з аккаунту</button>
+            </form>
+          {% else %}
+              <a href="{% url 'login' %}" class="btn btn-outline-primary ms-2">Log in</a>
+              <a href="{% url 'register' %}" class="btn btn-outline-success ms-2">Register</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</nav>
     {% if vote.deadline < today %}
-      <h1 style="color: #ff0000;">
+      <h1 style="color: #b40000;">
         This voting is over!
       </h1>
     {% endif %}
 
     {% if not user.is_authenticated %}
-      <h1 style="color: #ff0000;">
+      <h1 style="color: #b40000;">
         To vote you need to log in to your account!
       </h1>
     {% endif %}    
 
-    <h1>
-    Name: {{ vote.name }}<br>
-    Create Date: {{ vote.create_date }}<br>
-    Deadline: {{ vote.deadline }}<br>
-    Description: {{ vote.description }}
-    </h1>
+    <div class="container_vote">
+            Name: {{ vote.name }}<br>
+            Create Date: {{ vote.create_date }}<br>
+            Deadline: {{ vote.deadline }}<br>
+            Description: {{ vote.description }}
+    </div>
     <div class="row">
       {% for variant in variants %}
         <div class="col-6 d-flex justify-content-center align-items-center">
           <h3>
           {% if user.is_authenticated and vote.deadline > today %}
-          <a href="/vote/voice/{{ variant.id }}" class="btn btn-outline-primary">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
+          <a href="/vote/voice/{{ variant.id }}" class="vote_btn">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
           {% else %}
-          <a href="/vote/voice/{{ variant.id }}" class="btn btn-outline-primary disabled" role="button" aria-disabled="true">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
+          <a href="/vote/voice/{{ variant.id }}" class="vote_btn disabled" role="button" aria-disabled="true">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
           </h3>
           {% endif %}
         </div>

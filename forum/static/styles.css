@@ -669,6 +669,43 @@ nav {
     padding: 30px;
 }
 
+.container_vote {
+    display: flex;
+    align-items: center; 
+    
+    padding-left: 50px;
+    justify-content: center;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 35px;
+    font-weight: 700;
+    margin-bottom: 100px;
+    margin-top: 100px;
+}
+
+.vote_btn {
+    display: inline-block; 
+    width: 350px; 
+    padding: 10px 20px;
+    background-color: #0d4d72;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 21px;
+    align-items: center; 
+    justify-content: center;
+}
+
+.vote_btn:hover {
+    background-color: #053c5c;
+}
+
+.vote {
+    margin: 0;
+}
+
 .calendar {
     max-width: 600px;         
     margin: 35px;       
