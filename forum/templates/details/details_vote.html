@@ -66,9 +66,9 @@
         <div class="col-6 d-flex justify-content-center align-items-center">
           <h3>
           {% if user.is_authenticated and vote.deadline > today %}
-          <a href="/vote/voice/{{ variant.id }}" class="vote_btn">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
+          <a href="/vote/voice/{{ variant.id }}" class="btn btn-primary">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
           {% else %}
-          <a href="/vote/voice/{{ variant.id }}" class="vote_btn disabled" role="button" aria-disabled="true">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
+          <a href="/vote/voice/{{ variant.id }}" class="btn btn-primary disabled" role="button" aria-disabled="true">{{ variant.name }}(Voice:{{ variant.voices_count }})</a>
           </h3>
           {% endif %}
         </div>
